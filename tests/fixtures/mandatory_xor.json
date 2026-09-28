@@ -1,0 +1,1 @@
+{"schema":[{"id":"A_damaged","entity":"A","meaning":"A is damaged"},{"id":"B_damaged","entity":"B","meaning":"B is damaged"}],"support":[false,true,true,false],"probabilities":[0.0,0.5,0.5,0.0]}

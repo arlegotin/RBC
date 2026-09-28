@@ -30,6 +30,57 @@ Schema = tuple[Variable, ...]
 
 
 @dataclass(frozen=True)
+class DenseBelief:
+    logits: Any
+
+
+@dataclass(frozen=True)
+class SupportBelief:
+    support: Any
+    probabilities: Any = None
+
+
+@dataclass(frozen=True)
+class BundleProvenance:
+    evidence_hash: str
+    records_hash: str
+    schema_hash: str
+    tokenizer_hash: str
+    encoder_hash: str
+    head_hash: str
+    calibration_hash: str
+
+
+@dataclass(frozen=True)
+class BeliefBundle:
+    schema: Schema
+    world_indices: Any
+    belief: DenseBelief | SupportBelief
+    retained: Any
+    provenance: BundleProvenance
+
+
+@dataclass(frozen=True)
+class Accept:
+    action: bool
+    certificate: dict[str, Any]
+
+
+@dataclass(frozen=True)
+class Ambiguous:
+    world_a: int
+    world_b: int
+
+
+@dataclass(frozen=True)
+class OutOfScope:
+    reason: str
+
+
+Decision = Accept | Ambiguous | OutOfScope
+
+
+@dataclass(frozen=True)
 class PublicCase:
     case_id: str
     schema_id: str
