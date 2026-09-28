@@ -439,3 +439,28 @@ def run_g1(ctx: RunContext) -> dict[str, Any]:
     write_run(ctx)
     write_report(ctx.path)
     return ctx.record["stages"]["g1"]
+
+
+def run_stress(ctx: RunContext, methods: tuple[str, ...] | list[str]) -> dict[str, Any]:
+    from .report import write_report
+    from .stress import evaluate_stress
+
+    g1 = run_g1(ctx)
+    if g1["status"] not in {"passed", "no_go"}:
+        return {"status": "blocked", "reason": "G1 development screen is incomplete"}
+    old = ctx.record["stages"].get("g4_stress")
+    if old and old.get("status") == "measured":
+        return old
+    if not ctx.budget.can_start("core", 5.0):
+        ctx.record["stages"]["g4_stress"] = {"status": "budget_stopped"}
+        write_run(ctx)
+        return ctx.record["stages"]["g4_stress"]
+    with ctx.budget.measure("core"):
+        result = evaluate_stress(ctx.config, methods)
+        target = ctx.path / "stress.json"
+        target.write_text(json.dumps(result, sort_keys=True, indent=2, allow_nan=False) + "\n")
+        ctx.record["artifact_hashes"]["stress.json"] = hashlib.sha256(target.read_bytes()).hexdigest()
+        ctx.record["stages"]["g4_stress"] = {"status": "measured", "methods": list(methods), "targeted_cases": result["targeted"]["cases"], "shift_test_groups": result["shift"]["test_groups"]}
+    write_run(ctx)
+    write_report(ctx.path)
+    return ctx.record["stages"]["g4_stress"]

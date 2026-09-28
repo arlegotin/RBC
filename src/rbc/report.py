@@ -174,6 +174,13 @@ def verify_run(run_dir: Path) -> AuditResult:
         expected_metrics = recompute_metrics(run_dir)
         if json.loads((run_dir / "metrics.json").read_text()) != expected_metrics:
             errors.append("stored metrics differ from replay")
+        stress_stage = record.get("stages", {}).get("g4_stress", {})
+        if stress_stage.get("status") == "measured":
+            from .stress import evaluate_stress
+
+            expected_stress = evaluate_stress(record["config"], tuple(stress_stage["methods"]))
+            if json.loads((run_dir / "stress.json").read_text()) != expected_stress:
+                errors.append("stress results differ from deterministic replay")
         notes.append("Saved predictions and scalar decisions replayed; no learned or local-LLM model was used")
     except (OSError, ValueError, KeyError, TypeError, IndexError, AttributeError, json.JSONDecodeError) as exc:
         errors.append(f"audit could not replay run: {exc}")
@@ -207,6 +214,11 @@ def write_report(run_dir: Path) -> Path:
         joint_gap = g1_metrics["oracle_joint"]["coverage"] - g1_metrics["oracle_marginal_product"]["coverage"]
         parser_gap = g1_metrics["oracle_joint"]["coverage"] - g1_metrics["conventional_parser"]["coverage"]
         body += ["", "The oracle uses private observation labels and is an information ceiling. The parser reads only the public case and schema. The marginal product uses oracle marginals and is an information-loss diagnostic. These are development results, not a 2% accepted-risk claim.", "", f"Joint-minus-marginal coverage: {joint_gap:.3f}; oracle-minus-parser coverage: {parser_gap:.3f}. The fixed majority-action baseline made {diagnostics['constant_baseline']['check_errors']} errors on {diagnostics['constant_baseline']['check_groups']} held-out development cases. Always-abstain coverage is zero and its conditional risk is undefined.", f"Renderer audit: {g1.get('rendering_review', 'pending')}; the examples were agent-authored and reviewed by the coding agent, not independent humans.", "", "## Hypotheses", "", f"- Representation: {('joint support has a measured development headroom gap over marginal products' if joint_gap >= 0.10 else 'the measured development headroom did not meet the 10-point gate')}; no learned representation claim.", "- Learning: not attempted because G1 stopped the learned route.", "- Auxiliary policy supervision: not attempted.", "", "## Limits and next step", "", "This controlled generator and its renderer grammar do not validate transfer to independently written cases. Retain the exact parser as the reference for this workload; only reopen learning if a separately designed workload shows credible headroom over it.", ""]
+    if record.get("stages", {}).get("g4_stress", {}).get("status") == "measured":
+        stress = json.loads((run_dir / "stress.json").read_text())
+        old = stress["shift"]["old_calibration"]
+        fresh = stress["shift"]["recalibrated"]
+        body += ["## Stress and shift boundaries", "", f"The parser matched the declared behavior on {stress['targeted']['cases']} agent-authored targeted cases; semantic fixture mismatches: {stress['targeted']['semantic_failures']}. These repeated fixtures are not independent risk samples.", f"In a separate numeric counterexample, a frozen anti-correlation score retained the wrong XOR action on {old['accepted']} / {stress['shift']['test_groups']} shifted cases ({old['accepted_errors']} errors). Recalibration on separate shifted cases widened the retained set and accepted {fresh['accepted']} actions. The two populations have identical one-variable marginals; this is not a trained-model result.", ""]
     if audit.errors:
         body += ["## Audit failures", "", *[f"- {error}" for error in audit.errors], ""]
     if not g1 or g1.get("status") not in {"passed", "no_go"}:
