@@ -1,0 +1,1 @@
+{"group_splits":{"fixture-parent":"train"},"views":[{"case_id":"fixture-parent","source_group":"fixture-parent","split":"train","parent_id":null,"renderer":"plain","primary":true}],"settings":{"split_seed":2718}}

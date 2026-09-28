@@ -27,7 +27,7 @@ _KEYS: dict[str, set[str]] = {
     "downloads": {"core_bytes", "llm_bytes"},
     "memory": {"encoder_gib", "llm_gib", "reserve_fraction"},
     "schema": {"kernel_max", "learned_slots", "ast_depth", "ast_nodes"},
-    "data": {"seed", "split_seed", "policy_seed", "mixture", "stress_groups", "g1_dev", "pilot_train", "pilot_dev", "train", "dev", "calibration", "test"},
+    "data": {"seed", "split_seed", "policy_seed", "mixture", "stress_groups", "g1_dev", "pilot_train", "pilot_dev", "train", "dev", "calibration", "test", "train_renderer_weights", "dev_renderer_weights", "target_renderer_weights"},
     "encoder": {"repo", "batch", "max_tokens", "num_workers"},
     "training": {"seeds", "lr", "batch", "epochs", "lambdas", "betas", "eps", "weight_decay", "queries_per_update", "h3_gate", "curve_sizes", "repair_attempts"},
     "statistics": {"risk_target", "family_delta", "bootstrap_resamples", "bootstrap_seed", "alpha_grid", "confidence_grid"},

@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import math
 from dataclasses import dataclass
+from dataclasses import asdict
 from pathlib import Path
 from typing import Any, Mapping
 
@@ -169,3 +170,35 @@ def public_model_input(case: PublicCase) -> str:
         "text": case.text,
     }
     return json.dumps(payload, sort_keys=True, ensure_ascii=False, separators=(",", ":"), allow_nan=False)
+
+
+def public_case_to_dict(case: PublicCase) -> dict[str, Any]:
+    return {
+        "case_id": case.case_id,
+        "schema_id": case.schema_id,
+        "schema": [asdict(v) for v in case.schema],
+        "records": dict(case.records),
+        "text": case.text,
+    }
+
+
+def private_case_to_dict(case: PrivateCase) -> dict[str, Any]:
+    return asdict(case)
+
+
+def read_private_jsonl(path: Path) -> list[PrivateCase]:
+    expected = {"case_id", "true_world", "observation", "oracle_posterior", "source_group", "split", "renderer", "generation_seed", "relation_tags"}
+    cases: list[PrivateCase] = []
+    for line_number, line in enumerate(path.read_text().splitlines(), start=1):
+        try:
+            raw = json.loads(line)
+            if not isinstance(raw, dict) or set(raw) != expected:
+                raise ValidationError("private fields do not match contract")
+            cases.append(PrivateCase(
+                raw["case_id"], tuple(raw["true_world"]), raw["observation"],
+                tuple(raw["oracle_posterior"]), raw["source_group"], raw["split"],
+                raw["renderer"], raw["generation_seed"], tuple(raw["relation_tags"]),
+            ))
+        except (json.JSONDecodeError, KeyError, TypeError) as exc:
+            raise ValidationError(f"invalid private case at line {line_number}") from exc
+    return cases

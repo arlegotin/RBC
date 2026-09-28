@@ -22,6 +22,9 @@ data:
   split_seed: 2718
   policy_seed: 31415
   mixture: [0.30, 0.50, 0.20]
+  train_renderer_weights: {plain: 1.0, alternative: 0.0}
+  dev_renderer_weights: {plain: 0.25, alternative: 0.75}
+  target_renderer_weights: {plain: 0.25, alternative: 0.75}
   stress_groups: 256
   g1_dev: 500
   pilot_train: 1024
