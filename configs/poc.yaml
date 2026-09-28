@@ -1,0 +1,74 @@
+format_version: 1
+run_id: poc-20260928-01
+run_root: runs
+budget:
+  total_seconds: 10800
+  llm_seconds: 3600
+  repair_seconds: 1800
+downloads:
+  core_bytes: 500000000
+  llm_bytes: 6000000000
+memory:
+  encoder_gib: 8
+  llm_gib: 12
+  reserve_fraction: 0.5
+schema:
+  kernel_max: 12
+  learned_slots: 6
+  ast_depth: 6
+  ast_nodes: 64
+data:
+  seed: 20260928
+  split_seed: 2718
+  policy_seed: 31415
+  mixture: [0.30, 0.50, 0.20]
+  stress_groups: 256
+  g1_dev: 500
+  pilot_train: 1024
+  pilot_dev: 512
+  train: 6000
+  dev: 1000
+  calibration: 1000
+  test: 2000
+encoder:
+  repo: sentence-transformers/all-MiniLM-L6-v2
+  batch: 16
+  max_tokens: 256
+  num_workers: 0
+training:
+  seeds: [17, 29, 43]
+  lr: 0.0003
+  batch: 128
+  epochs: 20
+  lambdas: [0.0, 0.2, 1.0]
+  betas: [0.9, 0.999]
+  eps: 0.00000001
+  weight_decay: 0.01
+  queries_per_update: 4
+  h3_gate: two_point_gain
+  curve_sizes: [512, 1024]
+  repair_attempts: 1
+statistics:
+  risk_target: 0.02
+  family_delta: 0.05
+  bootstrap_resamples: 2000
+  bootstrap_seed: 1729
+  alpha_grid: [0.005, 0.01, 0.02, 0.05]
+  confidence_grid: [0.70, 0.80, 0.90, 0.95, 0.98, 0.99, 0.995, 1.0]
+local_llm:
+  enabled: auto
+  repo: mlx-community/Qwen3-4B-4bit
+  probe: 32
+  dev: 256
+  calibration: 256
+  test: 600
+  prompts_per_route: 2
+  penalties: [2, 5, 10]
+  syntax_repairs: 1
+timing:
+  warmups: 10
+  cheap_cases: 100
+  policy_counts: [1, 4, 16]
+numerics:
+  atol: 0.00001
+  rtol: 0.0001

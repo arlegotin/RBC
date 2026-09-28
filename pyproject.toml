@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "relational-belief-compilation"
+version = "0.1.0"
+description = "Local research proof of concept for reusable joint beliefs"
+requires-python = ">=3.11,<3.13"
+dependencies = ["numpy", "scipy", "PyYAML"]
+
+[project.optional-dependencies]
+test = ["pytest"]
+learned = ["torch", "transformers", "huggingface_hub", "safetensors"]
+local-llm = ["mlx-lm", "huggingface_hub"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

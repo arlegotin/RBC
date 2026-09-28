@@ -1,0 +1,45 @@
+"""Command-line entry point for local RBC runs."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from pathlib import Path
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(prog="python -m rbc")
+    sub = parser.add_subparsers(dest="command", required=True)
+    sub.add_parser("doctor")
+    run = sub.add_parser("run")
+    run.add_argument("--through", required=True, choices=("g0", "g1", "g2", "g3"))
+    run.add_argument("--config", required=True, type=Path)
+    verify = sub.add_parser("verify")
+    verify.add_argument("--run", required=True, type=Path)
+    report = sub.add_parser("report")
+    report.add_argument("--run", required=True, type=Path)
+    try:
+        args = parser.parse_args(argv)
+    except SystemExit as exc:
+        if exc.code == 0:
+            return 0
+        raise
+    if args.command == "doctor":
+        from .experiment import doctor
+
+        print(json.dumps(doctor(), indent=2, sort_keys=True))
+        return 0
+    if args.command == "report":
+        from .report import write_report
+
+        print(write_report(args.run))
+        return 0
+    if args.command in {"run", "verify"}:
+        print(f"{args.command} stage is not implemented yet", file=sys.stderr)
+        return 2
+    raise AssertionError("argparse allowed an unknown command")
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
