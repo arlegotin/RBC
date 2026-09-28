@@ -1,0 +1,67 @@
+{
+  "constant_baseline": {
+    "always_abstain_coverage": 0,
+    "always_abstain_risk": null,
+    "check_errors": 117,
+    "check_groups": 250,
+    "fit_groups": 250,
+    "majority_action": false
+  },
+  "dataset_audit": {
+    "errors": [],
+    "notes": [
+      "independently sampled text recurrence count: 92; copied views require shared provenance"
+    ],
+    "ok": true
+  },
+  "oracle_direct_curve": [
+    {
+      "accepted": 279,
+      "coverage": 0.558,
+      "errors": 27,
+      "threshold": 0.7
+    },
+    {
+      "accepted": 179,
+      "coverage": 0.358,
+      "errors": 2,
+      "threshold": 0.8
+    },
+    {
+      "accepted": 168,
+      "coverage": 0.336,
+      "errors": 0,
+      "threshold": 0.9
+    },
+    {
+      "accepted": 168,
+      "coverage": 0.336,
+      "errors": 0,
+      "threshold": 0.95
+    },
+    {
+      "accepted": 168,
+      "coverage": 0.336,
+      "errors": 0,
+      "threshold": 0.98
+    },
+    {
+      "accepted": 168,
+      "coverage": 0.336,
+      "errors": 0,
+      "threshold": 0.99
+    },
+    {
+      "accepted": 168,
+      "coverage": 0.336,
+      "errors": 0,
+      "threshold": 0.995
+    },
+    {
+      "accepted": 168,
+      "coverage": 0.336,
+      "errors": 0,
+      "threshold": 1.0
+    }
+  ]
+}

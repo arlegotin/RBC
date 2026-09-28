@@ -1,0 +1,950 @@
+[
+  {
+    "case_id": "case-000002",
+    "observation": {
+      "plan": {
+        "component": "explicit",
+        "probes": [
+          {
+            "ids": [
+              "v2"
+            ],
+            "kind": "bit"
+          },
+          {
+            "ids": [
+              "v1"
+            ],
+            "kind": "bit"
+          },
+          {
+            "ids": [
+              "v0"
+            ],
+            "kind": "bit"
+          },
+          {
+            "ids": [
+              "v5"
+            ],
+            "kind": "bit"
+          },
+          {
+            "ids": [
+              "v4"
+            ],
+            "kind": "bit"
+          }
+        ],
+        "queried_item": "blue",
+        "schema_ids": [
+          "v0",
+          "v1",
+          "v2",
+          "v3",
+          "v4",
+          "v5"
+        ],
+        "workflow": "aggregate"
+      },
+      "results": [
+        true,
+        false,
+        false,
+        true,
+        true
+      ]
+    },
+    "relation_tags": [
+      "explicit",
+      "bit",
+      "bit",
+      "bit",
+      "bit",
+      "bit"
+    ],
+    "renderer": "alternative",
+    "text": "The green item is unused. The blue item is damaged. The green item is damaged. The red item has been used. The red item is undamaged."
+  },
+  {
+    "case_id": "case-000003",
+    "observation": {
+      "plan": {
+        "component": "missing",
+        "probes": [],
+        "queried_item": "blue",
+        "schema_ids": [
+          "v0",
+          "v1",
+          "v2",
+          "v3",
+          "v4",
+          "v5"
+        ],
+        "workflow": "combination"
+      },
+      "results": []
+    },
+    "relation_tags": [
+      "missing"
+    ],
+    "renderer": "alternative",
+    "text": "No item condition was established."
+  },
+  {
+    "case_id": "case-000006",
+    "observation": {
+      "plan": {
+        "component": "relational",
+        "probes": [
+          {
+            "ids": [
+              "v1",
+              "v5",
+              "v3"
+            ],
+            "kind": "count"
+          },
+          {
+            "ids": [
+              "v0",
+              "v4"
+            ],
+            "kind": "count"
+          },
+          {
+            "ids": [
+              "v2"
+            ],
+            "kind": "bit"
+          }
+        ],
+        "queried_item": "red",
+        "schema_ids": [
+          "v0",
+          "v1",
+          "v2",
+          "v3",
+          "v4",
+          "v5"
+        ],
+        "workflow": "combination"
+      },
+      "results": [
+        2,
+        2,
+        true
+      ]
+    },
+    "relation_tags": [
+      "relational",
+      "count",
+      "count",
+      "bit"
+    ],
+    "renderer": "alternative",
+    "text": "The number of damaged items among the red and green items is two. The number of unused items among the red, green, and blue items is two. The blue item is damaged."
+  },
+  {
+    "case_id": "case-000008",
+    "observation": {
+      "plan": {
+        "component": "relational",
+        "probes": [
+          {
+            "ids": [
+              "v2",
+              "v0"
+            ],
+            "kind": "count"
+          },
+          {
+            "ids": [
+              "v1"
+            ],
+            "kind": "bit"
+          }
+        ],
+        "queried_item": "red",
+        "schema_ids": [
+          "v0",
+          "v1",
+          "v2",
+          "v3",
+          "v4",
+          "v5"
+        ],
+        "workflow": "aggregate"
+      },
+      "results": [
+        2,
+        false
+      ]
+    },
+    "relation_tags": [
+      "relational",
+      "count",
+      "bit"
+    ],
+    "renderer": "alternative",
+    "text": "The number of damaged items among the blue and red items is two. The red item has been used."
+  },
+  {
+    "case_id": "case-000031",
+    "observation": {
+      "plan": {
+        "component": "relational",
+        "probes": [
+          {
+            "ids": [
+              "v1",
+              "v4"
+            ],
+            "kind": "same"
+          },
+          {
+            "ids": [
+              "v0",
+              "v4",
+              "v2"
+            ],
+            "kind": "count"
+          },
+          {
+            "ids": [
+              "v5"
+            ],
+            "kind": "bit"
+          }
+        ],
+        "queried_item": "red",
+        "schema_ids": [
+          "v0",
+          "v1",
+          "v2",
+          "v3",
+          "v4",
+          "v5"
+        ],
+        "workflow": "combination"
+      },
+      "results": [
+        false,
+        3,
+        false
+      ]
+    },
+    "relation_tags": [
+      "relational",
+      "same",
+      "count",
+      "bit"
+    ],
+    "renderer": "alternative",
+    "text": "The number of damaged items among the red, green, and blue items is three. The unused status of the red item does not match the damage status of the green item. The green item has been used."
+  },
+  {
+    "case_id": "case-000039",
+    "observation": {
+      "plan": {
+        "component": "relational",
+        "probes": [
+          {
+            "ids": [
+              "v5",
+              "v1"
+            ],
+            "kind": "count"
+          },
+          {
+            "ids": [
+              "v1",
+              "v5",
+              "v3"
+            ],
+            "kind": "count"
+          }
+        ],
+        "queried_item": "red",
+        "schema_ids": [
+          "v0",
+          "v1",
+          "v2",
+          "v3",
+          "v4",
+          "v5"
+        ],
+        "workflow": "item"
+      },
+      "results": [
+        1,
+        1
+      ]
+    },
+    "relation_tags": [
+      "relational",
+      "count",
+      "count"
+    ],
+    "renderer": "alternative",
+    "text": "The number of unused items among the red, green, and blue items is one. The number of unused items among the green and red items is one."
+  },
+  {
+    "case_id": "case-000051",
+    "observation": {
+      "plan": {
+        "component": "relational",
+        "probes": [
+          {
+            "ids": [
+              "v0",
+              "v4",
+              "v2"
+            ],
+            "kind": "count"
+          }
+        ],
+        "queried_item": "green",
+        "schema_ids": [
+          "v0",
+          "v1",
+          "v2",
+          "v3",
+          "v4",
+          "v5"
+        ],
+        "workflow": "item"
+      },
+      "results": [
+        2
+      ]
+    },
+    "relation_tags": [
+      "relational",
+      "count"
+    ],
+    "renderer": "alternative",
+    "text": "The number of damaged items among the red, green, and blue items is two."
+  },
+  {
+    "case_id": "case-000060",
+    "observation": {
+      "plan": {
+        "component": "relational",
+        "probes": [
+          {
+            "ids": [
+              "v4",
+              "v2",
+              "v0"
+            ],
+            "kind": "count"
+          },
+          {
+            "ids": [
+              "v0",
+              "v3"
+            ],
+            "kind": "same"
+          },
+          {
+            "ids": [
+              "v1"
+            ],
+            "kind": "bit"
+          }
+        ],
+        "queried_item": "red",
+        "schema_ids": [
+          "v0",
+          "v1",
+          "v2",
+          "v3",
+          "v4",
+          "v5"
+        ],
+        "workflow": "item"
+      },
+      "results": [
+        1,
+        false,
+        true
+      ]
+    },
+    "relation_tags": [
+      "relational",
+      "count",
+      "same",
+      "bit"
+    ],
+    "renderer": "plain",
+    "text": "The damage status of the red item differs from the unused status of the blue item. The red item is unused. Exactly one of the green, blue, and red items is damaged."
+  },
+  {
+    "case_id": "case-000068",
+    "observation": {
+      "plan": {
+        "component": "relational",
+        "probes": [
+          {
+            "ids": [
+              "v3",
+              "v5"
+            ],
+            "kind": "same"
+          },
+          {
+            "ids": [
+              "v5"
+            ],
+            "kind": "bit"
+          }
+        ],
+        "queried_item": "red",
+        "schema_ids": [
+          "v0",
+          "v1",
+          "v2",
+          "v3",
+          "v4",
+          "v5"
+        ],
+        "workflow": "combination"
+      },
+      "results": [
+        true,
+        true
+      ]
+    },
+    "relation_tags": [
+      "relational",
+      "same",
+      "bit"
+    ],
+    "renderer": "alternative",
+    "text": "The green item is unused. The unused status of the blue item matches the unused status of the green item."
+  },
+  {
+    "case_id": "case-000087",
+    "observation": {
+      "plan": {
+        "component": "explicit",
+        "probes": [
+          {
+            "ids": [
+              "v3"
+            ],
+            "kind": "bit"
+          },
+          {
+            "ids": [
+              "v0"
+            ],
+            "kind": "bit"
+          },
+          {
+            "ids": [
+              "v5"
+            ],
+            "kind": "bit"
+          },
+          {
+            "ids": [
+              "v4"
+            ],
+            "kind": "bit"
+          }
+        ],
+        "queried_item": "red",
+        "schema_ids": [
+          "v0",
+          "v1",
+          "v2",
+          "v3",
+          "v4",
+          "v5"
+        ],
+        "workflow": "aggregate"
+      },
+      "results": [
+        false,
+        false,
+        true,
+        false
+      ]
+    },
+    "relation_tags": [
+      "explicit",
+      "bit",
+      "bit",
+      "bit",
+      "bit"
+    ],
+    "renderer": "plain",
+    "text": "The red item is not damaged. The green item is unused. The blue item is not unused. The green item is not damaged."
+  },
+  {
+    "case_id": "case-000090",
+    "observation": {
+      "plan": {
+        "component": "relational",
+        "probes": [
+          {
+            "ids": [
+              "v2",
+              "v0"
+            ],
+            "kind": "count"
+          }
+        ],
+        "queried_item": "green",
+        "schema_ids": [
+          "v0",
+          "v1",
+          "v2",
+          "v3",
+          "v4",
+          "v5"
+        ],
+        "workflow": "combination"
+      },
+      "results": [
+        1
+      ]
+    },
+    "relation_tags": [
+      "relational",
+      "count"
+    ],
+    "renderer": "plain",
+    "text": "Exactly one of the blue and red items is damaged."
+  },
+  {
+    "case_id": "case-000107",
+    "observation": {
+      "plan": {
+        "component": "relational",
+        "probes": [
+          {
+            "ids": [
+              "v5",
+              "v1"
+            ],
+            "kind": "same"
+          },
+          {
+            "ids": [
+              "v5"
+            ],
+            "kind": "bit"
+          }
+        ],
+        "queried_item": "red",
+        "schema_ids": [
+          "v0",
+          "v1",
+          "v2",
+          "v3",
+          "v4",
+          "v5"
+        ],
+        "workflow": "item"
+      },
+      "results": [
+        true,
+        false
+      ]
+    },
+    "relation_tags": [
+      "relational",
+      "same",
+      "bit"
+    ],
+    "renderer": "plain",
+    "text": "The unused status of the green item is the same as the unused status of the red item. The green item is not unused."
+  },
+  {
+    "case_id": "case-000109",
+    "observation": {
+      "plan": {
+        "component": "relational",
+        "probes": [
+          {
+            "ids": [
+              "v4",
+              "v2",
+              "v0"
+            ],
+            "kind": "count"
+          }
+        ],
+        "queried_item": "blue",
+        "schema_ids": [
+          "v0",
+          "v1",
+          "v2",
+          "v3",
+          "v4",
+          "v5"
+        ],
+        "workflow": "item"
+      },
+      "results": [
+        0
+      ]
+    },
+    "relation_tags": [
+      "relational",
+      "count"
+    ],
+    "renderer": "alternative",
+    "text": "The number of damaged items among the green, blue, and red items is zero."
+  },
+  {
+    "case_id": "case-000138",
+    "observation": {
+      "plan": {
+        "component": "relational",
+        "probes": [
+          {
+            "ids": [
+              "v5",
+              "v4"
+            ],
+            "kind": "same"
+          }
+        ],
+        "queried_item": "red",
+        "schema_ids": [
+          "v0",
+          "v1",
+          "v2",
+          "v3",
+          "v4",
+          "v5"
+        ],
+        "workflow": "combination"
+      },
+      "results": [
+        true
+      ]
+    },
+    "relation_tags": [
+      "relational",
+      "same"
+    ],
+    "renderer": "plain",
+    "text": "The unused status of the green item is the same as the damage status of the green item."
+  },
+  {
+    "case_id": "case-000195",
+    "observation": {
+      "plan": {
+        "component": "relational",
+        "probes": [
+          {
+            "ids": [
+              "v1",
+              "v3",
+              "v5"
+            ],
+            "kind": "count"
+          },
+          {
+            "ids": [
+              "v3"
+            ],
+            "kind": "bit"
+          }
+        ],
+        "queried_item": "blue",
+        "schema_ids": [
+          "v0",
+          "v1",
+          "v2",
+          "v3",
+          "v4",
+          "v5"
+        ],
+        "workflow": "item"
+      },
+      "results": [
+        3,
+        true
+      ]
+    },
+    "relation_tags": [
+      "relational",
+      "count",
+      "bit"
+    ],
+    "renderer": "alternative",
+    "text": "The number of unused items among the red, blue, and green items is three. The blue item is unused."
+  },
+  {
+    "case_id": "case-000196",
+    "observation": {
+      "plan": {
+        "component": "relational",
+        "probes": [
+          {
+            "ids": [
+              "v4",
+              "v2"
+            ],
+            "kind": "count"
+          },
+          {
+            "ids": [
+              "v2",
+              "v5"
+            ],
+            "kind": "same"
+          }
+        ],
+        "queried_item": "blue",
+        "schema_ids": [
+          "v0",
+          "v1",
+          "v2",
+          "v3",
+          "v4",
+          "v5"
+        ],
+        "workflow": "aggregate"
+      },
+      "results": [
+        0,
+        false
+      ]
+    },
+    "relation_tags": [
+      "relational",
+      "count",
+      "same"
+    ],
+    "renderer": "plain",
+    "text": "The damage status of the blue item differs from the unused status of the green item. Exactly zero of the green and blue items are damaged."
+  },
+  {
+    "case_id": "case-000206",
+    "observation": {
+      "plan": {
+        "component": "relational",
+        "probes": [
+          {
+            "ids": [
+              "v4",
+              "v2",
+              "v0"
+            ],
+            "kind": "count"
+          },
+          {
+            "ids": [
+              "v2"
+            ],
+            "kind": "bit"
+          }
+        ],
+        "queried_item": "green",
+        "schema_ids": [
+          "v0",
+          "v1",
+          "v2",
+          "v3",
+          "v4",
+          "v5"
+        ],
+        "workflow": "item"
+      },
+      "results": [
+        2,
+        false
+      ]
+    },
+    "relation_tags": [
+      "relational",
+      "count",
+      "bit"
+    ],
+    "renderer": "alternative",
+    "text": "The number of damaged items among the green, blue, and red items is two. The blue item is undamaged."
+  },
+  {
+    "case_id": "case-000217",
+    "observation": {
+      "plan": {
+        "component": "relational",
+        "probes": [
+          {
+            "ids": [
+              "v2",
+              "v3"
+            ],
+            "kind": "same"
+          },
+          {
+            "ids": [
+              "v3",
+              "v5",
+              "v1"
+            ],
+            "kind": "count"
+          },
+          {
+            "ids": [
+              "v4"
+            ],
+            "kind": "bit"
+          }
+        ],
+        "queried_item": "green",
+        "schema_ids": [
+          "v0",
+          "v1",
+          "v2",
+          "v3",
+          "v4",
+          "v5"
+        ],
+        "workflow": "item"
+      },
+      "results": [
+        false,
+        2,
+        true
+      ]
+    },
+    "relation_tags": [
+      "relational",
+      "same",
+      "count",
+      "bit"
+    ],
+    "renderer": "alternative",
+    "text": "The green item is damaged. The number of unused items among the blue, green, and red items is two. The damage status of the blue item does not match the unused status of the blue item."
+  },
+  {
+    "case_id": "case-000219",
+    "observation": {
+      "plan": {
+        "component": "relational",
+        "probes": [
+          {
+            "ids": [
+              "v4",
+              "v2",
+              "v0"
+            ],
+            "kind": "count"
+          },
+          {
+            "ids": [
+              "v3",
+              "v5",
+              "v1"
+            ],
+            "kind": "count"
+          }
+        ],
+        "queried_item": "green",
+        "schema_ids": [
+          "v0",
+          "v1",
+          "v2",
+          "v3",
+          "v4",
+          "v5"
+        ],
+        "workflow": "combination"
+      },
+      "results": [
+        1,
+        0
+      ]
+    },
+    "relation_tags": [
+      "relational",
+      "count",
+      "count"
+    ],
+    "renderer": "alternative",
+    "text": "The number of damaged items among the green, blue, and red items is one. The number of unused items among the blue, green, and red items is zero."
+  },
+  {
+    "case_id": "case-000221",
+    "observation": {
+      "plan": {
+        "component": "explicit",
+        "probes": [
+          {
+            "ids": [
+              "v2"
+            ],
+            "kind": "bit"
+          },
+          {
+            "ids": [
+              "v3"
+            ],
+            "kind": "bit"
+          },
+          {
+            "ids": [
+              "v4"
+            ],
+            "kind": "bit"
+          },
+          {
+            "ids": [
+              "v5"
+            ],
+            "kind": "bit"
+          },
+          {
+            "ids": [
+              "v1"
+            ],
+            "kind": "bit"
+          },
+          {
+            "ids": [
+              "v0"
+            ],
+            "kind": "bit"
+          }
+        ],
+        "queried_item": "red",
+        "schema_ids": [
+          "v0",
+          "v1",
+          "v2",
+          "v3",
+          "v4",
+          "v5"
+        ],
+        "workflow": "combination"
+      },
+      "results": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        true
+      ]
+    },
+    "relation_tags": [
+      "explicit",
+      "bit",
+      "bit",
+      "bit",
+      "bit",
+      "bit",
+      "bit"
+    ],
+    "renderer": "alternative",
+    "text": "The blue item is damaged. The green item has been used. The red item is damaged. The green item is undamaged. The blue item has been used. The red item has been used."
+  }
+]

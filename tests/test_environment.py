@@ -41,3 +41,4 @@ def test_doctor_reports_observed_hardware_without_optional_imports():
     assert result["physical_memory_bytes"] > 0
     assert result["disk_free_bytes"] > 0
     assert result["physical_memory_source"]
+    assert isinstance(result["chip"], str) or result["chip"] is None

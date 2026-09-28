@@ -1,0 +1,394 @@
+{
+  "g0": {
+    "exact_xor_constraints": {
+      "accepted": 1,
+      "accepted_errors": 0,
+      "coverage": 1.0,
+      "planned": 1,
+      "risk": 0.0,
+      "risk_upper": 0.9833333333333333
+    },
+    "oracle_joint": {
+      "accepted": 1,
+      "accepted_errors": 0,
+      "coverage": 1.0,
+      "planned": 1,
+      "risk": 0.0,
+      "risk_upper": 0.9833333333333333
+    },
+    "oracle_marginal_product": {
+      "accepted": 0,
+      "accepted_errors": 0,
+      "coverage": 0.0,
+      "planned": 1,
+      "risk": null,
+      "risk_upper": 1.0
+    }
+  },
+  "g1": {
+    "conventional_parser": {
+      "accepted": 168,
+      "accepted_errors": 0,
+      "coverage": 0.336,
+      "planned": 500,
+      "risk": 0.0,
+      "risk_upper": 0.024076521271332918
+    },
+    "oracle_joint": {
+      "accepted": 168,
+      "accepted_errors": 0,
+      "coverage": 0.336,
+      "planned": 500,
+      "risk": 0.0,
+      "risk_upper": 0.024076521271332918
+    },
+    "oracle_marginal_product": {
+      "accepted": 158,
+      "accepted_errors": 0,
+      "coverage": 0.316,
+      "planned": 500,
+      "risk": 0.0,
+      "risk_upper": 0.025580698067448324
+    }
+  },
+  "g1_diagnostics": {
+    "conventional_parser": {
+      "joint_nll": 2.2556093338090886,
+      "mean_retained_worlds": 17.398,
+      "median_retained_worlds": 12.0,
+      "policy_brier": 0.14553819444444446,
+      "probability_defined_cases": 500,
+      "state_set_coverage": 1.0
+    },
+    "oracle_joint": {
+      "joint_nll": 2.2556093338090886,
+      "mean_retained_worlds": 17.398,
+      "median_retained_worlds": 12.0,
+      "policy_brier": 0.14553819444444446,
+      "probability_defined_cases": 500,
+      "state_set_coverage": 1.0
+    },
+    "oracle_marginal_product": {
+      "joint_nll": 2.580821497056857,
+      "mean_retained_worlds": 27.116,
+      "median_retained_worlds": 16.0,
+      "policy_brier": 0.15274361282578877,
+      "probability_defined_cases": 500,
+      "state_set_coverage": 1.0
+    }
+  },
+  "g1_slices": {
+    "action_label": {
+      "false": {
+        "conventional_parser": {
+          "accepted": 96,
+          "accepted_errors": 0,
+          "cases": 264,
+          "coverage": 0.36363636363636365
+        },
+        "oracle_joint": {
+          "accepted": 96,
+          "accepted_errors": 0,
+          "cases": 264,
+          "coverage": 0.36363636363636365
+        },
+        "oracle_marginal_product": {
+          "accepted": 95,
+          "accepted_errors": 0,
+          "cases": 264,
+          "coverage": 0.35984848484848486
+        }
+      },
+      "true": {
+        "conventional_parser": {
+          "accepted": 72,
+          "accepted_errors": 0,
+          "cases": 236,
+          "coverage": 0.3050847457627119
+        },
+        "oracle_joint": {
+          "accepted": 72,
+          "accepted_errors": 0,
+          "cases": 236,
+          "coverage": 0.3050847457627119
+        },
+        "oracle_marginal_product": {
+          "accepted": 63,
+          "accepted_errors": 0,
+          "cases": 236,
+          "coverage": 0.2669491525423729
+        }
+      }
+    },
+    "component": {
+      "explicit": {
+        "conventional_parser": {
+          "accepted": 102,
+          "accepted_errors": 0,
+          "cases": 136,
+          "coverage": 0.75
+        },
+        "oracle_joint": {
+          "accepted": 102,
+          "accepted_errors": 0,
+          "cases": 136,
+          "coverage": 0.75
+        },
+        "oracle_marginal_product": {
+          "accepted": 102,
+          "accepted_errors": 0,
+          "cases": 136,
+          "coverage": 0.75
+        }
+      },
+      "missing": {
+        "conventional_parser": {
+          "accepted": 5,
+          "accepted_errors": 0,
+          "cases": 98,
+          "coverage": 0.05102040816326531
+        },
+        "oracle_joint": {
+          "accepted": 5,
+          "accepted_errors": 0,
+          "cases": 98,
+          "coverage": 0.05102040816326531
+        },
+        "oracle_marginal_product": {
+          "accepted": 5,
+          "accepted_errors": 0,
+          "cases": 98,
+          "coverage": 0.05102040816326531
+        }
+      },
+      "relational": {
+        "conventional_parser": {
+          "accepted": 61,
+          "accepted_errors": 0,
+          "cases": 266,
+          "coverage": 0.22932330827067668
+        },
+        "oracle_joint": {
+          "accepted": 61,
+          "accepted_errors": 0,
+          "cases": 266,
+          "coverage": 0.22932330827067668
+        },
+        "oracle_marginal_product": {
+          "accepted": 51,
+          "accepted_errors": 0,
+          "cases": 266,
+          "coverage": 0.19172932330827067
+        }
+      }
+    },
+    "oracle_ambiguity": {
+      "accept": {
+        "conventional_parser": {
+          "accepted": 168,
+          "accepted_errors": 0,
+          "cases": 168,
+          "coverage": 1.0
+        },
+        "oracle_joint": {
+          "accepted": 168,
+          "accepted_errors": 0,
+          "cases": 168,
+          "coverage": 1.0
+        },
+        "oracle_marginal_product": {
+          "accepted": 158,
+          "accepted_errors": 0,
+          "cases": 168,
+          "coverage": 0.9404761904761905
+        }
+      },
+      "ambiguous": {
+        "conventional_parser": {
+          "accepted": 0,
+          "accepted_errors": 0,
+          "cases": 332,
+          "coverage": 0.0
+        },
+        "oracle_joint": {
+          "accepted": 0,
+          "accepted_errors": 0,
+          "cases": 332,
+          "coverage": 0.0
+        },
+        "oracle_marginal_product": {
+          "accepted": 0,
+          "accepted_errors": 0,
+          "cases": 332,
+          "coverage": 0.0
+        }
+      }
+    },
+    "relation_order": {
+      "0": {
+        "conventional_parser": {
+          "accepted": 107,
+          "accepted_errors": 0,
+          "cases": 234,
+          "coverage": 0.45726495726495725
+        },
+        "oracle_joint": {
+          "accepted": 107,
+          "accepted_errors": 0,
+          "cases": 234,
+          "coverage": 0.45726495726495725
+        },
+        "oracle_marginal_product": {
+          "accepted": 107,
+          "accepted_errors": 0,
+          "cases": 234,
+          "coverage": 0.45726495726495725
+        }
+      },
+      "2": {
+        "conventional_parser": {
+          "accepted": 28,
+          "accepted_errors": 0,
+          "cases": 162,
+          "coverage": 0.1728395061728395
+        },
+        "oracle_joint": {
+          "accepted": 28,
+          "accepted_errors": 0,
+          "cases": 162,
+          "coverage": 0.1728395061728395
+        },
+        "oracle_marginal_product": {
+          "accepted": 24,
+          "accepted_errors": 0,
+          "cases": 162,
+          "coverage": 0.14814814814814814
+        }
+      },
+      "3": {
+        "conventional_parser": {
+          "accepted": 33,
+          "accepted_errors": 0,
+          "cases": 104,
+          "coverage": 0.3173076923076923
+        },
+        "oracle_joint": {
+          "accepted": 33,
+          "accepted_errors": 0,
+          "cases": 104,
+          "coverage": 0.3173076923076923
+        },
+        "oracle_marginal_product": {
+          "accepted": 27,
+          "accepted_errors": 0,
+          "cases": 104,
+          "coverage": 0.25961538461538464
+        }
+      }
+    },
+    "renderer": {
+      "alternative": {
+        "conventional_parser": {
+          "accepted": 133,
+          "accepted_errors": 0,
+          "cases": 375,
+          "coverage": 0.3546666666666667
+        },
+        "oracle_joint": {
+          "accepted": 133,
+          "accepted_errors": 0,
+          "cases": 375,
+          "coverage": 0.3546666666666667
+        },
+        "oracle_marginal_product": {
+          "accepted": 127,
+          "accepted_errors": 0,
+          "cases": 375,
+          "coverage": 0.33866666666666667
+        }
+      },
+      "plain": {
+        "conventional_parser": {
+          "accepted": 35,
+          "accepted_errors": 0,
+          "cases": 125,
+          "coverage": 0.28
+        },
+        "oracle_joint": {
+          "accepted": 35,
+          "accepted_errors": 0,
+          "cases": 125,
+          "coverage": 0.28
+        },
+        "oracle_marginal_product": {
+          "accepted": 31,
+          "accepted_errors": 0,
+          "cases": 125,
+          "coverage": 0.248
+        }
+      }
+    },
+    "workflow": {
+      "aggregate": {
+        "conventional_parser": {
+          "accepted": 55,
+          "accepted_errors": 0,
+          "cases": 160,
+          "coverage": 0.34375
+        },
+        "oracle_joint": {
+          "accepted": 55,
+          "accepted_errors": 0,
+          "cases": 160,
+          "coverage": 0.34375
+        },
+        "oracle_marginal_product": {
+          "accepted": 46,
+          "accepted_errors": 0,
+          "cases": 160,
+          "coverage": 0.2875
+        }
+      },
+      "combination": {
+        "conventional_parser": {
+          "accepted": 51,
+          "accepted_errors": 0,
+          "cases": 166,
+          "coverage": 0.3072289156626506
+        },
+        "oracle_joint": {
+          "accepted": 51,
+          "accepted_errors": 0,
+          "cases": 166,
+          "coverage": 0.3072289156626506
+        },
+        "oracle_marginal_product": {
+          "accepted": 51,
+          "accepted_errors": 0,
+          "cases": 166,
+          "coverage": 0.3072289156626506
+        }
+      },
+      "item": {
+        "conventional_parser": {
+          "accepted": 62,
+          "accepted_errors": 0,
+          "cases": 174,
+          "coverage": 0.3563218390804598
+        },
+        "oracle_joint": {
+          "accepted": 62,
+          "accepted_errors": 0,
+          "cases": 174,
+          "coverage": 0.3563218390804598
+        },
+        "oracle_marginal_product": {
+          "accepted": 61,
+          "accepted_errors": 0,
+          "cases": 174,
+          "coverage": 0.3505747126436782
+        }
+      }
+    }
+  }
+}

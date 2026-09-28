@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import sys
 from pathlib import Path
 
 
@@ -31,17 +30,17 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(doctor(), indent=2, sort_keys=True))
         return 0
     if args.command == "report":
-        from .report import write_report
+        from .report import verify_run, write_report
 
         print(write_report(args.run))
-        return 0
+        return 0 if verify_run(args.run).ok else 1
     if args.command == "verify":
         from .report import verify_run
 
         audit = verify_run(args.run)
         print(json.dumps({"ok": audit.ok, "errors": audit.errors, "notes": audit.notes}, indent=2, sort_keys=True))
         return 0 if audit.ok else 1
-    if args.command == "run" and args.through in {"g0", "g1"}:
+    if args.command == "run":
         from .experiment import load_config, open_run, run_g0, run_g1
 
         ctx = open_run(load_config(args.config))
@@ -49,11 +48,14 @@ def main(argv: list[str] | None = None) -> int:
             stage = run_g0(ctx) if args.through == "g0" else run_g1(ctx)
         finally:
             ctx.close()
+        if args.through in {"g2", "g3"}:
+            if stage["status"] == "no_go":
+                print(json.dumps({"status": "blocked_by_g1", "requested": args.through, "reason": stage["reason"]}, indent=2, sort_keys=True))
+            else:
+                print(json.dumps({"status": "not_implemented", "requested": args.through, "g1_status": stage["status"]}, indent=2, sort_keys=True))
+            return 2
         print(json.dumps(stage, indent=2, sort_keys=True))
         return 0 if stage["status"] in {"passed", "no_go"} else 1
-    if args.command == "run":
-        print(f"{args.command} stage is not implemented yet", file=sys.stderr)
-        return 2
     raise AssertionError("argparse allowed an unknown command")
 
 

@@ -1,0 +1,34 @@
+{
+  "checks": [
+    "entity and attribute references",
+    "count cardinality and named group",
+    "negation and equality direction",
+    "wording equivalence to recorded probe result"
+  ],
+  "conclusion": "No apparent text-to-observation mismatch in 20 inspected development renderings; automated parser/oracle support equivalence also held on all 500 cases. This is an agent audit, not independent human validation.",
+  "count": 20,
+  "findings": [],
+  "reviewed_case_ids": [
+    "case-000002",
+    "case-000003",
+    "case-000006",
+    "case-000008",
+    "case-000031",
+    "case-000039",
+    "case-000051",
+    "case-000060",
+    "case-000068",
+    "case-000087",
+    "case-000090",
+    "case-000107",
+    "case-000109",
+    "case-000138",
+    "case-000195",
+    "case-000196",
+    "case-000206",
+    "case-000217",
+    "case-000219",
+    "case-000221"
+  ],
+  "reviewer": "coding_agent"
+}

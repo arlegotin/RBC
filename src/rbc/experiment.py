@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import importlib.metadata
 import json
 import math
 import os
@@ -166,6 +167,15 @@ def open_run(config: dict[str, Any]) -> RunContext:
 
 
 def write_run(ctx: RunContext) -> None:
+    if "environment" not in ctx.record:
+        packages = ("numpy", "scipy", "PyYAML", "pytest", "torch", "transformers", "mlx-lm")
+        versions = {}
+        for package in packages:
+            try:
+                versions[package] = importlib.metadata.version(package)
+            except importlib.metadata.PackageNotFoundError:
+                versions[package] = None
+        ctx.record["environment"] = {"python": platform.python_version(), "architecture": platform.machine(), "macos": platform.mac_ver()[0] or None, "packages": versions}
     ctx.record["budget_charges"] = dict(ctx.budget.charges)
     ctx.record["config_hash"] = _hash_json(ctx.config)
     encoded = json.dumps(ctx.record, sort_keys=True, indent=2, allow_nan=False).encode() + b"\n"
@@ -180,9 +190,13 @@ def write_run(ctx: RunContext) -> None:
 def doctor() -> dict[str, Any]:
     memory = 0
     source = "unavailable"
+    chip = None
     if sys.platform == "darwin":
         try:
             result = subprocess.run(["system_profiler", "SPHardwareDataType"], check=True, capture_output=True, text=True, timeout=15)
+            chip_match = re.search(r"^\s*Chip:\s*(.+?)\s*$", result.stdout, re.MULTILINE)
+            if chip_match:
+                chip = chip_match.group(1)
             match = re.search(r"^\s*Memory:\s*([\d.]+)\s*(GB|TB)\s*$", result.stdout, re.MULTILINE)
             if match:
                 memory = int(float(match.group(1)) * (1000**3 if match.group(2) == "GB" else 1000**4))
@@ -197,6 +211,7 @@ def doctor() -> dict[str, Any]:
             pass
     return {
         "architecture": platform.machine(),
+        "chip": chip,
         "macos": platform.mac_ver()[0] or None,
         "python": platform.python_version(),
         "physical_memory_bytes": memory,
@@ -210,6 +225,40 @@ def doctor() -> dict[str, Any]:
 def _source_fingerprint() -> dict[str, str]:
     root = Path(__file__).resolve().parents[2]
     return {str(path.relative_to(root)): hashlib.sha256(path.read_bytes()).hexdigest() for path in (root / "src/rbc/types.py", root / "src/rbc/logic.py", root / "src/rbc/data.py", root / "src/rbc/calibration.py")}
+
+
+def _replay_source_fingerprint() -> dict[str, str]:
+    root = Path(__file__).resolve().parents[2]
+    names = ("__main__", "experiment", "report", "baselines", "data", "logic", "types", "calibration", "stress", "timing")
+    return {f"src/rbc/{name}.py": hashlib.sha256((root / f"src/rbc/{name}.py").read_bytes()).hexdigest() for name in names}
+
+
+def _store_g0_source_snapshots(ctx: RunContext) -> None:
+    root = Path(__file__).resolve().parents[2]
+    fingerprints = _source_fingerprint()
+    if ctx.record.get("g0_source_fingerprint") != fingerprints:
+        raise ValueError("G0 source changed; cannot reconstruct source snapshots")
+    snapshots = {}
+    for relative, digest in fingerprints.items():
+        destination = ctx.path / "source" / relative
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        source_bytes = (root / relative).read_bytes()
+        destination.write_bytes(source_bytes)
+        saved = str(destination.relative_to(ctx.path))
+        snapshots[saved] = digest
+        ctx.record.setdefault("artifact_hashes", {})[saved] = digest
+    ctx.record["source_snapshots"] = snapshots
+
+
+def _store_parser_source_snapshot(ctx: RunContext) -> None:
+    source = Path(__file__).with_name("baselines.py")
+    digest = hashlib.sha256(source.read_bytes()).hexdigest()
+    relpath = "source/src/rbc/baselines.py"
+    destination = ctx.path / relpath
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_bytes(source.read_bytes())
+    ctx.record["g1_parser_source_snapshot"] = {"path": relpath, "sha256": digest}
+    ctx.record.setdefault("artifact_hashes", {})[relpath] = digest
 
 
 def evaluate_g1(metrics: dict[str, Any], config: dict[str, Any]) -> dict[str, Any]:
@@ -237,6 +286,9 @@ def run_g0(ctx: RunContext) -> dict[str, Any]:
     if old and old.get("status") == "passed":
         if ctx.record.get("g0_source_fingerprint") != _source_fingerprint():
             raise ValueError("G0 source changed; use a new run ID")
+        if not ctx.record.get("source_snapshots"):
+            _store_g0_source_snapshots(ctx)
+            write_run(ctx)
         audit = verify_run(ctx.path)
         if not audit.ok:
             raise ValueError(f"completed G0 artifacts failed audit: {audit.errors}")
@@ -304,6 +356,8 @@ def run_g0(ctx: RunContext) -> dict[str, Any]:
                 (ctx.path / "predictions.jsonl").write_text("".join(json.dumps(asdict(row), sort_keys=True, allow_nan=False) + "\n" for row in rows))
                 ctx.record["planned_primary"] = {"g0_fixture": {"group_id": fixture_private.source_group, "policy_key_hex": rows[0].policy_key_hex, "models": sorted(model_supports)}}
                 ctx.record["g0_source_fingerprint"] = _source_fingerprint()
+                _store_g0_source_snapshots(ctx)
+                ctx.record["replay_source_fingerprint"] = _replay_source_fingerprint()
                 ctx.record["stages"]["g0"] = {"status": "passed", "test_command": " ".join(command), "test_output": completed.stdout.strip(), "generated_truth_checks": len(audited), "scope": "numeric_oracle_and_kernel_only"}
                 (ctx.path / "metrics.json").write_text(json.dumps(recompute_metrics(ctx.path), sort_keys=True, indent=2, allow_nan=False) + "\n")
                 file_paths = [path for path in ctx.path.rglob("*") if path.is_file() and path.name not in {"run.json", "REPORT.md", ".run.lock"} and not path.name.startswith(".")]
@@ -334,6 +388,9 @@ def run_g1(ctx: RunContext) -> dict[str, Any]:
         audit = verify_run(ctx.path)
         if not audit.ok:
             raise ValueError(f"completed G1 artifacts failed audit: {audit.errors}")
+        if ctx.record.get("claims", {}).get("H1") == "not_attempted":
+            ctx.record["claims"] = {"H1": "EXACT_NUMERIC_FIXTURE_ONLY; INSUFFICIENT_JOINT_MARGINAL_HEADROOM; NO_HEADROOM_OVER_SIMPLE_BASELINE", "H2": "NOT_ATTEMPTED_G1_NO_GO", "H3": "NOT_ATTEMPTED_G1_NO_GO"}
+            write_run(ctx)
         return old
     if not ctx.budget.can_start("core", 30.0):
         ctx.record["stages"]["g1"] = {"status": "budget_stopped", "reason": "insufficient remaining time for 500-case screen"}
@@ -435,6 +492,9 @@ def run_g1(ctx: RunContext) -> dict[str, Any]:
         decision = evaluate_g1({"oracle_coverage": oracle["coverage"], "marginal_coverage": marginal["coverage"], "parser_coverage": parser["coverage"], "parser_errors": parser["accepted_errors"], "parser_acceptances": parser["accepted"], "paired_lower_vs_parser": lower, "n_cases": len(dev_ids), "scope": "mixture"}, ctx.config)
         (ctx.path / "metrics.json").write_text(json.dumps(metrics, sort_keys=True, indent=2, allow_nan=False) + "\n")
         ctx.record["stages"]["g1"] = {**decision, "n_cases": len(dev_ids), "parser_tuning": "Frozen grammar covers both declared renderer families; no development-error changes after G1 outcomes", "review_candidates": len(review), "rendering_review": "pending", "local_llm": "not_attempted_early_screen"}
+        if decision["status"] == "no_go":
+            ctx.record["claims"] = {"H1": "EXACT_NUMERIC_FIXTURE_ONLY; INSUFFICIENT_JOINT_MARGINAL_HEADROOM; NO_HEADROOM_OVER_SIMPLE_BASELINE", "H2": "NOT_ATTEMPTED_G1_NO_GO", "H3": "NOT_ATTEMPTED_G1_NO_GO"}
+        _store_parser_source_snapshot(ctx)
         ctx.record["artifact_hashes"] = {str(path.relative_to(ctx.path)): hashlib.sha256(path.read_bytes()).hexdigest() for path in sorted(ctx.path.rglob("*")) if path.is_file() and path.name not in {"run.json", "REPORT.md", ".run.lock"} and not path.name.startswith(".")}
     write_run(ctx)
     write_report(ctx.path)

@@ -1,0 +1,1 @@
+{"case_id": "fixture-1", "records": {}, "schema": [{"entity": "A", "id": "A_damaged", "meaning": "A is damaged"}, {"entity": "B", "id": "B_damaged", "meaning": "B is damaged"}], "schema_id": "fixture-two-v1", "text": "Exactly one of A and B is damaged."}

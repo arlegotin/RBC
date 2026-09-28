@@ -1,0 +1,76 @@
+{
+  "shift": {
+    "alpha": 0.02,
+    "old_calibration": {
+      "accepted": 128,
+      "accepted_errors": 128,
+      "retained_worlds": 32,
+      "threshold": 0.0
+    },
+    "predictor": "synthetic frozen anti-correlation logits, not a trained RBC model",
+    "recalibrated": {
+      "accepted": 0,
+      "accepted_errors": 0,
+      "retained_worlds": 64,
+      "threshold": 10.0
+    },
+    "same_one_variable_marginals": true,
+    "test_groups": 128
+  },
+  "targeted": {
+    "cases": 256,
+    "category_counts": {
+      "at_least_one": {
+        "accept": 32,
+        "ambiguous": 0,
+        "cases": 32,
+        "outofscope": 0
+      },
+      "contradiction": {
+        "accept": 0,
+        "ambiguous": 0,
+        "cases": 32,
+        "outofscope": 32
+      },
+      "exactly_one": {
+        "accept": 32,
+        "ambiguous": 0,
+        "cases": 32,
+        "outofscope": 0
+      },
+      "fully_observed": {
+        "accept": 32,
+        "ambiguous": 0,
+        "cases": 32,
+        "outofscope": 0
+      },
+      "long_input": {
+        "accept": 0,
+        "ambiguous": 0,
+        "cases": 32,
+        "outofscope": 32
+      },
+      "no_evidence": {
+        "accept": 0,
+        "ambiguous": 32,
+        "cases": 32,
+        "outofscope": 0
+      },
+      "quoted_instruction": {
+        "accept": 0,
+        "ambiguous": 0,
+        "cases": 32,
+        "outofscope": 32
+      },
+      "unknown_prose": {
+        "accept": 0,
+        "ambiguous": 0,
+        "cases": 32,
+        "outofscope": 32
+      }
+    },
+    "failure_ids": [],
+    "method": "conventional_parser",
+    "semantic_failures": 0
+  }
+}

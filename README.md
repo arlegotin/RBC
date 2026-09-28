@@ -7,7 +7,7 @@ The repository contains an executable exact kernel and a development-only G1 scr
 - [Research specification](docs/superpowers/specs/2026-09-28-rbc-design.md): semantics, data boundaries, models, baselines, resource ceilings, statistical rules, and decision gates.
 - [Implementation plan](docs/superpowers/plans/2026-09-28-rbc.md): concrete interfaces, tests, commands, conditional tasks, and commit boundaries.
 
-The [G1 outcome record](docs/results/2026-09-28-g1.md) gives the gate decision and its limits. The plan targets an Apple Silicon M3 Max, with memory and throughput discovered during implementation, and caps experiment compute at 180 minutes.
+The [G1 outcome record](docs/results/2026-09-28-g1.md) gives the gate decision and its limits. The [replayable run](runs/poc-20260928-01/REPORT.md) includes public/private generated cases, source snapshots, per-case predictions, masks, metrics, stress results, timing, and the effective config in `run.json`. The run is about 2 MB. The plan targets an Apple Silicon M3 Max and caps experiment compute at 180 minutes; this run used the machine's measured 36 GB memory configuration.
 
 Bootstrap in the project directory with native arm64 Python 3.11 or 3.12:
 
@@ -19,7 +19,14 @@ python -m rbc doctor
 python -m pytest -q
 ```
 
-The tested core versions are in `requirements.lock.txt`. For a pinned reinstall in a fresh venv, install that file and then `python -m pip install -e . --no-deps`. Run the exact kernel without model downloads:
+The tested core versions are in `requirements.lock.txt`. For a pinned reinstall in a fresh venv, use:
+
+```bash
+python -m pip install -r requirements.lock.txt
+python -m pip install -e . --no-deps
+```
+
+Replay and resume the completed gates offline, without model downloads:
 
 ```bash
 python -m rbc run --through g0 --config configs/poc.yaml
@@ -27,3 +34,5 @@ python -m rbc run --through g1 --config configs/poc.yaml
 python -m rbc verify --run runs/poc-20260928-01
 python -m rbc report --run runs/poc-20260928-01
 ```
+
+The G1 no-go stops the learned and local-LLM routes, so this run has no encoder or Qwen snapshot revision to fetch and no model weights to redistribute. `run --through g2` and `run --through g3` report `blocked_by_g1` and return nonzero on this run; those stages were not executed. The 256 targeted stress cases and 128-case numeric shift counterexample are in `stress.json`; parser timings from 100 local cases are in `timing.json`. The latter do not establish an RBC speed advantage.

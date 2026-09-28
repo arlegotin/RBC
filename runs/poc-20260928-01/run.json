@@ -1,0 +1,4269 @@
+{
+  "artifact_hashes": {
+    "bundles/exact_xor_constraints/arrays-2b8b1b48aae5dacb286291d9d6acec333225483931ba7d4da1d76351e19faeab.npz": "2b8b1b48aae5dacb286291d9d6acec333225483931ba7d4da1d76351e19faeab",
+    "bundles/exact_xor_constraints/metadata.json": "97e00d8e122daebda9618cc1a55670c5b52c3073d7b0aac8b804100cbbde31c1",
+    "bundles/oracle_joint/arrays-2b8b1b48aae5dacb286291d9d6acec333225483931ba7d4da1d76351e19faeab.npz": "2b8b1b48aae5dacb286291d9d6acec333225483931ba7d4da1d76351e19faeab",
+    "bundles/oracle_joint/metadata.json": "c26cab179bcf684c20dc736134fad91b712857f795ed10d0317cb381b8473824",
+    "bundles/oracle_marginal_product/arrays-8baa64e4abb34dc72f6c6d5c687675e6691f021082ab54d040affbd4faa9cdcd.npz": "8baa64e4abb34dc72f6c6d5c687675e6691f021082ab54d040affbd4faa9cdcd",
+    "bundles/oracle_marginal_product/metadata.json": "015a626aea6de16946ff7f16556a549b29fb42d201f3e82c88d182aa42b1416d",
+    "data/g1_diagnostics.json": "88cf59ac833f6b39d16c2a4b52107fffd490281ea78bfcf00d64561b8d374f48",
+    "data/g1_manifest.json": "121db85f6efb365554d6f5304c2df1eb910fd92facf7d8237a5702de9cf05b16",
+    "data/g1_masks.npz": "b891902b0474743b8ef56a7143d7a10de0469935bb740690b1e3764ec23d5f76",
+    "data/g1_private.jsonl": "1c62cf03788c97708c653289408584eb1c1d92831440fd2abc224cc84db28007",
+    "data/g1_public.jsonl": "ee64b2b359c5887b7476237df547d7155764b6727dbe925918d35f70c540e906",
+    "data/g1_rendering_review.json": "97a029b5b170b394c4e739256a93d9e9f84e446cb92052eb7193404e72ca16fc",
+    "data/g1_review_candidates.json": "7646185a0171a43a0ca56bc0e7b83a23bb5ed4e639df01f1fcbbd59fb49427b0",
+    "data/private.jsonl": "f52a196187e8da8f965c27b6455ec661f7d328adb39edd64dc8c623cd102c644",
+    "data/public.jsonl": "f7156febbd87a808f17b4c70f077a17209fee6050962fd37a55d6a22e4150d0d",
+    "metrics.json": "254d589b936f8b37549ffde389b3b88f8b860cb427437bc8af23529257be76fc",
+    "predictions.jsonl": "a1ec456877d1d54757453db4028cbd08f1087ebf6d826714aa1b5b44888f1047",
+    "source/src/rbc/baselines.py": "448280c44c3c0f64a5f7338250cb47fec074b971c005bb671cb6cdbc2bbfebee",
+    "source/src/rbc/calibration.py": "8a099ab64fbb00557bd29bf924de36ab85a1897ea0aaf0fa47f50b2d558e0920",
+    "source/src/rbc/data.py": "a44c777cb268b6a1461cb930e851e487cf72a8627afa179d79191544a2acd4d3",
+    "source/src/rbc/logic.py": "eed4f598a198606a1c47fbd552a8b5e5b479964de42e07d93227e7a0192fa694",
+    "source/src/rbc/types.py": "e26c34654b7202eb0577a2d60fe476a4e53d024b48492a72507527976d344b4f",
+    "stress.json": "1fea62d1c892fee35bf1e2a4055ac23be3968a640ec92f52b814d4a90e2dd393",
+    "timing.json": "955994b9a08ac83b61cf54617be2863ec134eecf5f2965367035ce30405769c3"
+  },
+  "budget_charges": {
+    "core": 8.862015415914357
+  },
+  "claims": {
+    "H1": "EXACT_NUMERIC_FIXTURE_ONLY; INSUFFICIENT_JOINT_MARGINAL_HEADROOM; NO_HEADROOM_OVER_SIMPLE_BASELINE",
+    "H2": "NOT_ATTEMPTED_G1_NO_GO",
+    "H3": "NOT_ATTEMPTED_G1_NO_GO"
+  },
+  "config": {
+    "budget": {
+      "llm_seconds": 3600,
+      "repair_seconds": 1800,
+      "total_seconds": 10800
+    },
+    "data": {
+      "calibration": 1000,
+      "dev": 1000,
+      "dev_renderer_weights": {
+        "alternative": 0.75,
+        "plain": 0.25
+      },
+      "g1_dev": 500,
+      "mixture": [
+        0.3,
+        0.5,
+        0.2
+      ],
+      "pilot_dev": 512,
+      "pilot_train": 1024,
+      "policy_seed": 31415,
+      "seed": 20260928,
+      "split_seed": 2718,
+      "stress_groups": 256,
+      "target_renderer_weights": {
+        "alternative": 0.75,
+        "plain": 0.25
+      },
+      "test": 2000,
+      "train": 6000,
+      "train_renderer_weights": {
+        "alternative": 0.0,
+        "plain": 1.0
+      }
+    },
+    "downloads": {
+      "core_bytes": 500000000,
+      "llm_bytes": 6000000000
+    },
+    "encoder": {
+      "batch": 16,
+      "max_tokens": 256,
+      "num_workers": 0,
+      "repo": "sentence-transformers/all-MiniLM-L6-v2"
+    },
+    "format_version": 1,
+    "local_llm": {
+      "calibration": 256,
+      "dev": 256,
+      "enabled": "auto",
+      "penalties": [
+        2,
+        5,
+        10
+      ],
+      "probe": 32,
+      "prompts_per_route": 2,
+      "repo": "mlx-community/Qwen3-4B-4bit",
+      "syntax_repairs": 1,
+      "test": 600
+    },
+    "memory": {
+      "encoder_gib": 8,
+      "llm_gib": 12,
+      "reserve_fraction": 0.5
+    },
+    "numerics": {
+      "atol": 1e-05,
+      "rtol": 0.0001
+    },
+    "run_id": "poc-20260928-01",
+    "run_root": "runs",
+    "schema": {
+      "ast_depth": 6,
+      "ast_nodes": 64,
+      "kernel_max": 12,
+      "learned_slots": 6
+    },
+    "statistics": {
+      "alpha_grid": [
+        0.005,
+        0.01,
+        0.02,
+        0.05
+      ],
+      "bootstrap_resamples": 2000,
+      "bootstrap_seed": 1729,
+      "confidence_grid": [
+        0.7,
+        0.8,
+        0.9,
+        0.95,
+        0.98,
+        0.99,
+        0.995,
+        1.0
+      ],
+      "family_delta": 0.05,
+      "risk_target": 0.02
+    },
+    "timing": {
+      "cheap_cases": 100,
+      "policy_counts": [
+        1,
+        4,
+        16
+      ],
+      "warmups": 10
+    },
+    "training": {
+      "batch": 128,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "curve_sizes": [
+        512,
+        1024
+      ],
+      "epochs": 20,
+      "eps": 1e-08,
+      "h3_gate": "two_point_gain",
+      "lambdas": [
+        0.0,
+        0.2,
+        1.0
+      ],
+      "lr": 0.0003,
+      "queries_per_update": 4,
+      "repair_attempts": 1,
+      "seeds": [
+        17,
+        29,
+        43
+      ],
+      "weight_decay": 0.01
+    }
+  },
+  "config_hash": "5382b13ea6ee41f022e8e2429bd73c64addd23f6659f6a49efd7a43fef7bac25",
+  "environment": {
+    "architecture": "arm64",
+    "macos": "26.6.2",
+    "packages": {
+      "PyYAML": "6.0.3",
+      "mlx-lm": null,
+      "numpy": "2.5.3",
+      "pytest": "9.1.1",
+      "scipy": "1.18.1",
+      "torch": null,
+      "transformers": null
+    },
+    "python": "3.12.9"
+  },
+  "format_version": 1,
+  "g0_source_fingerprint": {
+    "src/rbc/calibration.py": "8a099ab64fbb00557bd29bf924de36ab85a1897ea0aaf0fa47f50b2d558e0920",
+    "src/rbc/data.py": "a44c777cb268b6a1461cb930e851e487cf72a8627afa179d79191544a2acd4d3",
+    "src/rbc/logic.py": "eed4f598a198606a1c47fbd552a8b5e5b479964de42e07d93227e7a0192fa694",
+    "src/rbc/types.py": "e26c34654b7202eb0577a2d60fe476a4e53d024b48492a72507527976d344b4f"
+  },
+  "g1_parser_source_snapshot": {
+    "path": "source/src/rbc/baselines.py",
+    "producer_commit": "a73b4deb4080d4c7ecbab5e5eaef8c37160f2967",
+    "sha256": "448280c44c3c0f64a5f7338250cb47fec074b971c005bb671cb6cdbc2bbfebee"
+  },
+  "g1_planned_primary": {
+    "case-000002": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-000003": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-000006": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-000008": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-000031": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-000039": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-000051": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-000060": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-000068": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-000087": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-000090": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-000107": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-000109": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-000138": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-000195": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-000196": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-000206": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-000217": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-000219": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-000221": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-000222": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-000223": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-000225": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-000228": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-000234": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-000278": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-000280": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-000285": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-000290": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-000291": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-000295": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-000317": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-000321": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-000323": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-000325": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-000333": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-000334": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-000341": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-000351": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-000363": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-000364": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-000369": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-000388": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-000397": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-000457": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-000466": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-000469": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-000480": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-000482": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-000504": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-000508": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-000521": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-000522": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-000546": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-000574": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-000579": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-000591": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-000593": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-000595": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-000598": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-000612": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-000628": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-000632": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-000637": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-000644": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-000651": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-000654": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-000663": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-000673": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-000686": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-000691": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-000692": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-000694": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-000705": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-000710": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-000714": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-000722": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-000728": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-000740": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-000743": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-000744": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-000771": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-000784": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-000790": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-000792": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-000815": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-000821": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-000832": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-000841": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-000842": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-000845": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-000850": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-000851": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-000890": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-000892": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-000894": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-000917": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-000920": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-000929": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-000938": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-000941": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-000955": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-000965": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-000978": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-000980": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-001006": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-001026": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-001030": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-001061": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-001068": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-001076": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-001104": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-001109": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-001130": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-001142": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-001158": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-001159": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-001161": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-001174": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-001178": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-001201": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-001204": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-001210": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-001221": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-001225": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-001277": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-001285": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-001301": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-001304": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-001318": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-001338": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-001343": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-001350": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-001361": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-001366": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-001376": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-001386": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-001400": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-001453": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-001455": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-001456": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-001461": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-001472": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-001483": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-001494": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-001501": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-001536": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-001542": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-001549": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-001558": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-001559": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-001560": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-001573": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-001584": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-001587": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-001594": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-001607": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-001619": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-001643": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-001669": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-001688": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-001695": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-001696": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-001699": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-001709": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-001710": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-001713": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-001714": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-001717": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-001724": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-001735": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-001738": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-001739": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-001745": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-001768": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-001769": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-001789": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-001825": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-001829": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-001835": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-001837": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-001839": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-001848": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-001850": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-001864": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-001866": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-001884": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-001913": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-001928": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-001938": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-001950": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-001961": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-001982": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-001983": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-001990": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-001997": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-002003": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-002011": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-002015": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-002017": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-002023": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-002028": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-002083": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-002090": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-002105": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-002109": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-002114": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-002115": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-002116": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-002119": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-002122": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-002127": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-002142": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-002152": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-002153": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-002155": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-002168": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-002171": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-002173": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-002177": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-002179": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-002220": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-002244": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-002252": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-002257": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-002271": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-002295": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-002314": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-002338": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-002343": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-002344": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-002353": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-002354": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-002362": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-002364": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-002366": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-002367": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-002377": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-002381": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-002384": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-002386": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-002397": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-002401": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-002403": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-002407": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-002417": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-002418": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-002449": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-002468": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-002470": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-002497": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-002504": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-002510": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-002525": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-002529": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-002533": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-002534": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-002539": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-002559": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-002561": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-002569": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-002571": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-002579": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-002580": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-002586": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-002592": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-002594": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-002597": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-002600": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-002603": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-002621": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-002623": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-002638": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-002666": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-002676": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-002708": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-002711": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-002712": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-002716": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-002723": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-002725": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-002733": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-002734": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-002759": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-002761": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-002780": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-002800": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-002817": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-002820": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-002836": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-002849": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-002878": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-002879": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-002890": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-002892": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-002904": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-002929": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-002947": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-002955": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-002965": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-002975": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-002984": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-003010": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-003014": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-003023": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-003059": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-003068": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-003078": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-003092": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-003097": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-003131": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-003139": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-003159": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-003178": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-003183": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-003190": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-003191": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-003192": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-003195": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-003202": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-003218": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-003288": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-003296": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-003300": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-003325": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-003326": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-003329": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-003338": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-003340": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-003372": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-003374": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-003375": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-003388": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-003405": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-003410": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-003411": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-003416": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-003423": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-003443": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-003445": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-003462": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-003476": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-003485": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-003492": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-003514": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-003516": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-003534": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-003568": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-003578": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-003580": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-003590": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-003591": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-003593": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-003599": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-003600": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-003616": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-003617": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-003629": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-003634": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-003636": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-003651": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-003656": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-003659": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-003683": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-003698": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-003718": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-003742": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-003748": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-003750": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-003751": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-003754": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-003780": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-003812": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-003830": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-003834": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-003842": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-003848": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-003862": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-003865": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-003895": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-003902": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-003912": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-003917": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-003924": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-003937": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-003941": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-003952": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-003966": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-003971": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-004008": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-004015": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-004016": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-004034": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-004075": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-004089": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-004097": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-004099": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-004113": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-004121": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-004132": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-004144": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-004169": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-004172": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-004177": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-004182": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-004184": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-004192": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-004216": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-004225": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-004226": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-004233": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-004238": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-004250": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-004255": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-004259": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-004261": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-004268": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-004293": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-004315": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-004319": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-004338": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-004339": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-004345": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-004354": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-004356": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-004391": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-004393": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-004396": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-004415": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-004418": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-004431": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-004434": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-004439": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-004471": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-004480": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-004484": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-004499": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-004500": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-004502": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-004508": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-004512": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-004519": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-004527": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-004529": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-004532": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-004542": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-004546": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-004547": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-004571": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-004587": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-004599": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-004600": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-004616": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-004620": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-004632": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-004633": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-004634": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "0000ffff00000000"
+    },
+    "case-004637": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-004654": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-004680": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-004687": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-004694": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-004751": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-004756": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-004757": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-004790": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-004805": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-004806": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-004814": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-004834": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-004835": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-004836": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-004846": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-004856": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-004861": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-004862": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-004895": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-004904": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-004911": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-004927": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-004944": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-004970": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-004977": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-004978": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-004992": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-005004": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-005008": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "aaaaaaaaaaaaffff"
+    },
+    "case-005009": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-005031": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-005045": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-005054": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    },
+    "case-005058": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-005069": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-005071": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "00f0ffff00f0ffff"
+    },
+    "case-005084": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-005094": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-005098": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "5a5a5f5f5a5a5f5f"
+    },
+    "case-005135": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f000f000f000f000"
+    },
+    "case-005137": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "f8f8f8f8f8f8f8f8"
+    },
+    "case-005148": {
+      "models": [
+        "conventional_parser",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "2222222222222222"
+    }
+  },
+  "planned_primary": {
+    "g0_fixture": {
+      "group_id": "fixture-root-1",
+      "models": [
+        "exact_xor_constraints",
+        "oracle_joint",
+        "oracle_marginal_product"
+      ],
+      "policy_key_hex": "06"
+    }
+  },
+  "replay_source_fingerprint": {
+    "src/rbc/__main__.py": "aaf1a852ddb267ea610a501fb360f15899aa40015cdbe2b69c495b7f11c2799b",
+    "src/rbc/baselines.py": "448280c44c3c0f64a5f7338250cb47fec074b971c005bb671cb6cdbc2bbfebee",
+    "src/rbc/calibration.py": "8a099ab64fbb00557bd29bf924de36ab85a1897ea0aaf0fa47f50b2d558e0920",
+    "src/rbc/data.py": "a44c777cb268b6a1461cb930e851e487cf72a8627afa179d79191544a2acd4d3",
+    "src/rbc/experiment.py": "b3403d8bb38d08b11e6724995fe5ff70f12791cc0104279919e1d38b70e85758",
+    "src/rbc/logic.py": "eed4f598a198606a1c47fbd552a8b5e5b479964de42e07d93227e7a0192fa694",
+    "src/rbc/report.py": "b4c9e28c17ef30708bea523029b09d4dd894dc30466e3a9c6c9622556d6da91a",
+    "src/rbc/stress.py": "9445d6fd3f60a9186474645ea385874e48a6c0beb7bfdc81aad9c2fea17f6e29",
+    "src/rbc/timing.py": "5c1259fc4ffcd35e3918a8bae2b1a13f209ae77ac60b132041cbe8921db0a437",
+    "src/rbc/types.py": "e26c34654b7202eb0577a2d60fe476a4e53d024b48492a72507527976d344b4f"
+  },
+  "source_snapshots": {
+    "source/src/rbc/calibration.py": "8a099ab64fbb00557bd29bf924de36ab85a1897ea0aaf0fa47f50b2d558e0920",
+    "source/src/rbc/data.py": "a44c777cb268b6a1461cb930e851e487cf72a8627afa179d79191544a2acd4d3",
+    "source/src/rbc/logic.py": "eed4f598a198606a1c47fbd552a8b5e5b479964de42e07d93227e7a0192fa694",
+    "source/src/rbc/types.py": "e26c34654b7202eb0577a2d60fe476a4e53d024b48492a72507527976d344b4f"
+  },
+  "stages": {
+    "g0": {
+      "generated_truth_checks": 16,
+      "scope": "numeric_oracle_and_kernel_only",
+      "status": "passed",
+      "test_command": "/Volumes/git/legotin/RBC/.venv/bin/python -m pytest -q tests/test_logic.py tests/test_public_boundary.py tests/test_decisions.py tests/test_bundle_io.py tests/test_generator.py tests/test_renderers.py tests/test_splits.py tests/test_policy_pools.py tests/test_calibration.py tests/test_statistics.py",
+      "test_output": "........................................                                 [100%]\n40 passed in 7.07s"
+    },
+    "g1": {
+      "claim_scope": "mixture",
+      "local_llm": "not_attempted_early_screen",
+      "n_cases": 500,
+      "parser_tuning": "Frozen grammar covers both declared renderer families; no development-error changes after G1 outcomes",
+      "reason": "INSUFFICIENT_JOINT_MARGINAL_HEADROOM",
+      "rendering_review": "20/20 inspected; no apparent mismatch",
+      "review_candidates": 20,
+      "status": "no_go"
+    },
+    "g4_stress": {
+      "methods": [
+        "conventional_parser"
+      ],
+      "shift_test_groups": 128,
+      "status": "measured",
+      "targeted_cases": 256
+    },
+    "g4_timing": {
+      "batch_size": 1,
+      "cases": 100,
+      "methods": [
+        "conventional_parser"
+      ],
+      "status": "measured",
+      "warmups": 10
+    }
+  }
+}
