@@ -1,0 +1,1 @@
+{"case_id":"fixture-1","schema_id":"fixture-two-v1","schema":[{"id":"A_damaged","entity":"A","meaning":"A is damaged"},{"id":"B_damaged","entity":"B","meaning":"B is damaged"}],"records":{},"text":"Exactly one of A and B is damaged."}

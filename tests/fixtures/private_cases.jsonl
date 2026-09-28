@@ -1,0 +1,1 @@
+{"case_id":"fixture-1","true_world":[true,false],"observation":{"probes":[{"kind":"count_eq","ids":["A_damaged","B_damaged"],"result":1}]},"oracle_posterior":[0.0,0.5,0.5,0.0],"source_group":"fixture-root-1","split":"fixture","renderer":"plain","generation_seed":1,"relation_tags":["xor"]}
