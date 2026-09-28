@@ -212,6 +212,20 @@ def _source_fingerprint() -> dict[str, str]:
     return {str(path.relative_to(root)): hashlib.sha256(path.read_bytes()).hexdigest() for path in (root / "src/rbc/types.py", root / "src/rbc/logic.py", root / "src/rbc/data.py", root / "src/rbc/calibration.py")}
 
 
+def evaluate_g1(metrics: dict[str, Any], config: dict[str, Any]) -> dict[str, Any]:
+    """Apply the frozen development rejection rules; this is not test confirmation."""
+    del config
+    gap = metrics["oracle_coverage"] - metrics["marginal_coverage"]
+    parser_gap = metrics["oracle_coverage"] - metrics["parser_coverage"]
+    if gap < 0.10 - 1e-12:
+        return {"status": "no_go", "reason": "INSUFFICIENT_JOINT_MARGINAL_HEADROOM", "claim_scope": metrics["scope"]}
+    if parser_gap <= 0.05 + 1e-12 and metrics["parser_errors"] <= 0.01 * max(1, metrics["parser_acceptances"]):
+        return {"status": "no_go", "reason": "NO_HEADROOM_OVER_SIMPLE_BASELINE", "claim_scope": metrics["scope"]}
+    if metrics["parser_acceptances"] < 50 or metrics["parser_errors"] > 0.01 * metrics["parser_acceptances"] or metrics["paired_lower_vs_parser"] <= 0 or parser_gap < 0.05 - 1e-12:
+        return {"status": "no_go", "reason": "NO_CREDIBLE_LOW_ERROR_BASELINE_GAP", "claim_scope": metrics["scope"]}
+    return {"status": "passed", "reason": "DEVELOPMENT_HEADROOM", "claim_scope": metrics["scope"]}
+
+
 def run_g0(ctx: RunContext) -> dict[str, Any]:
     from .calibration import PredictionRow
     from .data import generate_source, policy_key
@@ -297,3 +311,131 @@ def run_g0(ctx: RunContext) -> dict[str, Any]:
     write_run(ctx)
     write_report(ctx.path)
     return ctx.record["stages"]["g0"]
+
+
+def run_g1(ctx: RunContext) -> dict[str, Any]:
+    """Run the bounded development-only headroom screen."""
+    from dataclasses import replace
+
+    from .baselines import compile_oracle, compile_parser, marginal_product, policy_probability
+    from .calibration import PredictionRow, paired_coverage_interval
+    from .data import (ManifestView, SplitManifest, assign_splits, audit_dataset,
+                       build_policy_pools, generate_source, policy_key,
+                       renderer_for_split, returns_schema, select_primary_policy)
+    from .logic import ast_to_dict, decide
+    from .report import recompute_metrics, verify_run, write_report
+    from .types import Accept, Ambiguous, OutOfScope, private_case_to_dict, public_case_to_dict, public_model_input
+
+    g0 = run_g0(ctx)
+    if g0["status"] != "passed":
+        return {"status": "blocked", "reason": "G0 did not pass"}
+    old = ctx.record["stages"].get("g1")
+    if old and old.get("status") in {"passed", "no_go"}:
+        audit = verify_run(ctx.path)
+        if not audit.ok:
+            raise ValueError(f"completed G1 artifacts failed audit: {audit.errors}")
+        return old
+    if not ctx.budget.can_start("core", 30.0):
+        ctx.record["stages"]["g1"] = {"status": "budget_stopped", "reason": "insufficient remaining time for 500-case screen"}
+        write_run(ctx)
+        return ctx.record["stages"]["g1"]
+    ctx.record["stages"]["g1"] = {"status": "running"}
+    write_run(ctx)
+    with ctx.budget.measure("core"):
+        data_cfg = ctx.config["data"]
+        total = sum(int(data_cfg[name]) for name in ("train", "dev", "calibration", "test"))
+        source_ids = [f"case-{index:06d}" for index in range(total)]
+        split_manifest = assign_splits(source_ids, ctx.config)
+        dev_ids = [id for id in source_ids if split_manifest.group_splits[id] == "dev"][:data_cfg["g1_dev"]]
+        if len(dev_ids) != data_cfg["g1_dev"] or not dev_ids:
+            raise ValueError("G1 requires the configured number of development groups")
+        pools = build_policy_pools(returns_schema(), data_cfg["policy_seed"])
+        public_cases = []
+        private_cases = []
+        rows: list[PredictionRow] = []
+        masks: dict[str, list[np.ndarray]] = {name: [] for name in ("oracle_joint", "conventional_parser", "oracle_marginal_product")}
+        views: list[ManifestView] = []
+        oracle_direct: list[dict[str, Any]] = []
+        review: list[dict[str, Any]] = []
+        policy_outcomes: list[bool] = []
+        for index, source_id in enumerate(dev_ids):
+            numeric_id = int(source_id.split("-")[-1])
+            seed = int(data_cfg["seed"]) + numeric_id
+            renderer = renderer_for_split(ctx.config, "dev", np.random.default_rng(seed + 10_000_000))
+            generated_cfg = {**ctx.config, "data": {**data_cfg, "renderer_family": renderer}}
+            source = generate_source(generated_cfg, source_id, seed)
+            public = source.public
+            private = replace(source.private, split="dev")
+            public_cases.append(public)
+            private_cases.append(private)
+            policy_rng = np.random.default_rng(int(data_cfg["policy_seed"]) + numeric_id)
+            policy = select_primary_policy(public, {"workflow": source.workflow, "queried_item": source.queried_item}, pools.dev[source.workflow], policy_rng)
+            key = policy_key(policy, public.schema).hex()
+            policy_dict = ast_to_dict(policy)
+            truth = private.true_world
+            from .logic import evaluate_scalar
+            policy_outcomes.append(bool(evaluate_scalar(policy, public.schema, truth)))
+            posterior = np.asarray(private.oracle_posterior, dtype=np.float64)
+            product = marginal_product(posterior, public.schema)
+            methods = {
+                "oracle_joint": compile_oracle(public, private),
+                "conventional_parser": compile_parser(public),
+            }
+            from .logic import make_bundle
+            from .types import SupportBelief
+            oracle_bundle = methods["oracle_joint"]
+            methods["oracle_marginal_product"] = make_bundle(public.schema, SupportBelief(product > 0, product), product > 0, oracle_bundle.provenance)
+            oracle_direct.append({"case_id": source_id, "policy_true_probability": policy_probability(posterior, policy, public.schema), "action": policy_outcomes[-1]})
+            for model_id, bundle in methods.items():
+                retained = np.zeros(64, dtype=np.bool_) if isinstance(bundle, OutOfScope) else np.asarray(bundle.retained, dtype=np.bool_)
+                masks[model_id].append(retained)
+                result = bundle if isinstance(bundle, OutOfScope) else decide(bundle, policy)
+                status = "accept" if isinstance(result, Accept) else ("ambiguous" if isinstance(result, Ambiguous) else "out_of_scope")
+                rows.append(PredictionRow("g1_dev", source_id, source_id, model_id, key, True, None, status,
+                                          result.action if isinstance(result, Accept) else None, None,
+                                          policy_dict, (result.world_a, result.world_b) if isinstance(result, Ambiguous) else None,
+                                          "data/g1_masks.npz"))
+            public_hash = hashlib.sha256(public_model_input(public).encode()).hexdigest()
+            norm_hash = hashlib.sha256(" ".join(public.text.casefold().split()).encode()).hexdigest()
+            views.append(ManifestView(source_id, source_id, "dev", None, renderer, True, public_hash, norm_hash, key))
+            if index < 20:
+                review.append({"case_id": source_id, "renderer": renderer, "text": public.text,
+                               "observation": private.observation, "relation_tags": private.relation_tags})
+        data_dir = ctx.path / "data"
+        data_dir.mkdir(exist_ok=True)
+        (data_dir / "g1_public.jsonl").write_text("".join(json.dumps(public_case_to_dict(case), sort_keys=True) + "\n" for case in public_cases))
+        (data_dir / "g1_private.jsonl").write_text("".join(json.dumps(private_case_to_dict(case), sort_keys=True) + "\n" for case in private_cases))
+        np.savez_compressed(data_dir / "g1_masks.npz", **{name: np.stack(values) for name, values in masks.items()})
+        manifest = SplitManifest(split_manifest.group_splits, tuple(views), {**split_manifest.settings, "policy_seed": data_cfg["policy_seed"]})
+        (data_dir / "g1_manifest.json").write_text(json.dumps(asdict(manifest), sort_keys=True, indent=2) + "\n")
+        (data_dir / "g1_review_candidates.json").write_text(json.dumps(review, sort_keys=True, indent=2) + "\n")
+        dataset_audit = audit_dataset(data_dir / "g1_public.jsonl", data_dir / "g1_private.jsonl", manifest, pools)
+        if not dataset_audit.ok:
+            raise ValueError(f"G1 data audit failed: {dataset_audit.errors}")
+        # Oracle direct-policy confidence is a diagnostic ceiling, not a deployable model.
+        direct_curve = []
+        for threshold in ctx.config["statistics"]["confidence_grid"]:
+            chosen = [item for item in oracle_direct if max(item["policy_true_probability"], 1-item["policy_true_probability"]) >= threshold]
+            errors = sum((item["policy_true_probability"] >= 0.5) != item["action"] for item in chosen)
+            direct_curve.append({"threshold": threshold, "accepted": len(chosen), "errors": errors, "coverage": len(chosen)/len(oracle_direct)})
+        fit_n = len(policy_outcomes) // 2
+        majority = sum(policy_outcomes[:fit_n]) >= fit_n / 2
+        baseline = {"fit_groups": fit_n, "check_groups": len(policy_outcomes)-fit_n, "majority_action": bool(majority),
+                    "check_errors": sum(answer != majority for answer in policy_outcomes[fit_n:]),
+                    "always_abstain_coverage": 0, "always_abstain_risk": None}
+        (data_dir / "g1_diagnostics.json").write_text(json.dumps({"oracle_direct_curve": direct_curve, "constant_baseline": baseline, "dataset_audit": asdict(dataset_audit)}, sort_keys=True, indent=2) + "\n")
+        with (ctx.path / "predictions.jsonl").open("a") as output:
+            output.writelines(json.dumps(asdict(row), sort_keys=True, allow_nan=False) + "\n" for row in rows)
+        ctx.record["g1_planned_primary"] = {view.case_id: {"policy_key_hex": view.policy_key_hex, "models": sorted(masks)} for view in views}
+        metrics = recompute_metrics(ctx.path)
+        oracle = metrics["g1"]["oracle_joint"]
+        marginal = metrics["g1"]["oracle_marginal_product"]
+        parser = metrics["g1"]["conventional_parser"]
+        _, lower, _ = paired_coverage_interval([r for r in rows if r.model_id == "oracle_joint"], [r for r in rows if r.model_id == "conventional_parser"], ctx.config["statistics"]["bootstrap_resamples"], ctx.config["statistics"]["bootstrap_seed"])
+        decision = evaluate_g1({"oracle_coverage": oracle["coverage"], "marginal_coverage": marginal["coverage"], "parser_coverage": parser["coverage"], "parser_errors": parser["accepted_errors"], "parser_acceptances": parser["accepted"], "paired_lower_vs_parser": lower, "n_cases": len(dev_ids), "scope": "mixture"}, ctx.config)
+        (ctx.path / "metrics.json").write_text(json.dumps(metrics, sort_keys=True, indent=2, allow_nan=False) + "\n")
+        ctx.record["stages"]["g1"] = {**decision, "n_cases": len(dev_ids), "parser_tuning": "Frozen grammar covers both declared renderer families; no development-error changes after G1 outcomes", "review_candidates": len(review), "rendering_review": "pending", "local_llm": "not_attempted_early_screen"}
+        ctx.record["artifact_hashes"] = {str(path.relative_to(ctx.path)): hashlib.sha256(path.read_bytes()).hexdigest() for path in sorted(ctx.path.rglob("*")) if path.is_file() and path.name not in {"run.json", "REPORT.md", ".run.lock"} and not path.name.startswith(".")}
+    write_run(ctx)
+    write_report(ctx.path)
+    return ctx.record["stages"]["g1"]

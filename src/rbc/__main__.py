@@ -41,16 +41,16 @@ def main(argv: list[str] | None = None) -> int:
         audit = verify_run(args.run)
         print(json.dumps({"ok": audit.ok, "errors": audit.errors, "notes": audit.notes}, indent=2, sort_keys=True))
         return 0 if audit.ok else 1
-    if args.command == "run" and args.through == "g0":
-        from .experiment import load_config, open_run, run_g0
+    if args.command == "run" and args.through in {"g0", "g1"}:
+        from .experiment import load_config, open_run, run_g0, run_g1
 
         ctx = open_run(load_config(args.config))
         try:
-            stage = run_g0(ctx)
+            stage = run_g0(ctx) if args.through == "g0" else run_g1(ctx)
         finally:
             ctx.close()
         print(json.dumps(stage, indent=2, sort_keys=True))
-        return 0 if stage["status"] == "passed" else 1
+        return 0 if stage["status"] in {"passed", "no_go"} else 1
     if args.command == "run":
         print(f"{args.command} stage is not implemented yet", file=sys.stderr)
         return 2
