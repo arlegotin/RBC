@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import hashlib
+import math
 from pathlib import Path
 from typing import Any
 
@@ -181,6 +182,26 @@ def verify_run(run_dir: Path) -> AuditResult:
             expected_stress = evaluate_stress(record["config"], tuple(stress_stage["methods"]))
             if json.loads((run_dir / "stress.json").read_text()) != expected_stress:
                 errors.append("stress results differ from deterministic replay")
+        timing_stage = record.get("stages", {}).get("g4_timing", {})
+        if timing_stage.get("status") == "measured":
+            from .timing import economic_sensitivity
+
+            timing = json.loads((run_dir / "timing.json").read_text())
+            measured = timing["measured"]
+            needed = {"compile_ms", "one_policy_ms"} | {f"{prefix}_{count}_ms" for prefix in ("simultaneous", "future_only", "compile_plus_future") for count in (1, 4, 16)}
+            if measured["method"] != "conventional_parser" or measured["samples"] < 100 or measured["warmups"] < 10 or measured["batch_size"] != 1 or set(measured["latency_ms"]) != needed:
+                errors.append("timing stage is missing required full-pipeline measurements")
+            if set(measured["case_ids"]) - {case.case_id for case in g1_cases} or len(set(measured["case_ids"])) != measured["samples"]:
+                errors.append("timing case IDs are not distinct completed G1 cases")
+            if not math.isfinite(measured["cold_process_import_compile_ms"]) or measured["cold_process_import_compile_ms"] < 0:
+                errors.append("invalid cold-load timing")
+            for name, values in measured["latency_ms"].items():
+                if not all(math.isfinite(values[key]) and values[key] >= 0 for key in ("p50", "p95", "mean")) or values["p95"] < values["p50"]:
+                    errors.append(f"invalid timing summary: {name}")
+            input_metrics = expected_metrics["g1"]["conventional_parser"]
+            expected_economics = economic_sensitivity({"compile_plus_future_16_ms": measured["latency_ms"]["compile_plus_future_16_ms"]["mean"], "coverage": input_metrics["coverage"]}, timing["economic_assumptions"])
+            if timing["economic_sensitivity"] != expected_economics:
+                errors.append("economic sensitivity does not match measured inputs and assumptions")
         notes.append("Saved predictions and scalar decisions replayed; no learned or local-LLM model was used")
     except (OSError, ValueError, KeyError, TypeError, IndexError, AttributeError, json.JSONDecodeError) as exc:
         errors.append(f"audit could not replay run: {exc}")
@@ -219,6 +240,20 @@ def write_report(run_dir: Path) -> Path:
         old = stress["shift"]["old_calibration"]
         fresh = stress["shift"]["recalibrated"]
         body += ["## Stress and shift boundaries", "", f"The parser matched the declared behavior on {stress['targeted']['cases']} agent-authored targeted cases; semantic fixture mismatches: {stress['targeted']['semantic_failures']}. These repeated fixtures are not independent risk samples.", f"In a separate numeric counterexample, a frozen anti-correlation score retained the wrong XOR action on {old['accepted']} / {stress['shift']['test_groups']} shifted cases ({old['accepted_errors']} errors). Recalibration on separate shifted cases widened the retained set and accepted {fresh['accepted']} actions. The two populations have identical one-variable marginals; this is not a trained-model result.", ""]
+    if record.get("stages", {}).get("g4_timing", {}).get("status") == "measured":
+        timing = json.loads((run_dir / "timing.json").read_text())
+        measured = timing["measured"]
+        body += ["## Measured local work", "", f"On the recorded {measured['hardware']['architecture']} machine ({measured['hardware']['physical_memory_bytes'] / 1e9:.1f} GB physical memory), the public parser ran {measured['warmups']} warmups and {measured['samples']} timed cases at batch size one. Cold process import plus first compile: {measured['cold_process_import_compile_ms']:.3f} ms. Peak process RSS: {measured['peak_process_rss_bytes'] / 1e6:.1f} MB. No encoder or LLM timing was measured.", "", "| Pipeline stage | p50 ms | p95 ms |", "| --- | ---: | ---: |"]
+        for name in ("compile_ms", "one_policy_ms", "simultaneous_1_ms", "simultaneous_4_ms", "simultaneous_16_ms", "future_only_1_ms", "future_only_4_ms", "future_only_16_ms", "compile_plus_future_16_ms"):
+            values = measured["latency_ms"][name]
+            body.append(f"| {name} | {values['p50']:.4f} | {values['p95']:.4f} |")
+        body += ["", "The parser was compiled once per case in every 1/4/16-policy scenario. These timings do not establish an RBC speed advantage because no learned route was built.", "", "## Hypothetical cost sensitivity", "", "Money inputs are hypothetical; review fraction comes from the generated G1 parser coverage. End-to-end success is unknown, so cost per successful case is unavailable.", "", "| Review cost | Parser vs all-review cost/case | Zero review advantage cost/case | Hypothetical tenth machine-cost alternative |", "| ---: | ---: | ---: | ---: |"]
+        by_cost = {}
+        for row in timing["economic_sensitivity"]:
+            by_cost.setdefault(row["review_cost"], {})[row["scenario"]] = row["cost_per_case"]
+        for cost, scenarios in sorted(by_cost.items()):
+            body.append(f"| ${cost:.2f} | ${scenarios['parser_vs_always_review']:.4f} | ${scenarios['zero_review_advantage']:.4f} | ${scenarios['hypothetical_llm_tenth_machine_cost']:.4f} |")
+        body += [""]
     if audit.errors:
         body += ["## Audit failures", "", *[f"- {error}" for error in audit.errors], ""]
     if not g1 or g1.get("status") not in {"passed", "no_go"}:

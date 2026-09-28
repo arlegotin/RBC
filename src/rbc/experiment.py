@@ -464,3 +464,74 @@ def run_stress(ctx: RunContext, methods: tuple[str, ...] | list[str]) -> dict[st
     write_run(ctx)
     write_report(ctx.path)
     return ctx.record["stages"]["g4_stress"]
+
+
+def benchmark_methods(ctx: RunContext, methods: tuple[str, ...] | list[str], case_ids: list[str] | tuple[str, ...]) -> dict[str, Any]:
+    """Measure only the quality-tested public parser route on frozen development IDs."""
+    import resource
+
+    from .baselines import compile_parser
+    from .data import build_policy_pools, policy_key, returns_schema
+    from .logic import decide
+    from .report import write_report
+    from .timing import economic_sensitivity, measure_pipeline
+    from .types import OutOfScope, read_public_jsonl
+
+    g1 = run_g1(ctx)
+    if g1["status"] not in {"passed", "no_go"}:
+        return {"status": "blocked", "reason": "G1 development screen is incomplete"}
+    if set(methods) != {"conventional_parser"}:
+        raise ValueError("timing is available only for the completed public parser route")
+    old = ctx.record["stages"].get("g4_timing")
+    if old and old.get("status") == "measured":
+        return old
+    needed = ctx.config["timing"]["cheap_cases"]
+    if len(case_ids) != needed or len(set(case_ids)) != needed:
+        raise ValueError("timing requires the frozen number of distinct cases")
+    by_id = {case.case_id: case for case in read_public_jsonl(ctx.path / "data/g1_public.jsonl")}
+    if not set(case_ids) <= set(by_id):
+        raise ValueError("timing cases must come from the completed G1 development set")
+    cases = [by_id[id] for id in case_ids]
+    pools = build_policy_pools(returns_schema(), ctx.config["data"]["policy_seed"])
+    unique = {}
+    for pool in (pools.train, pools.dev, pools.confirmation):
+        for policies in pool.values():
+            for policy in policies:
+                unique[policy_key(policy, returns_schema())] = policy
+    policies = list(unique.values())[:16]
+    if len(policies) < 16:
+        raise ValueError("fewer than 16 executable policies are available")
+    if not ctx.budget.can_start("core", 10.0):
+        ctx.record["stages"]["g4_timing"] = {"status": "budget_stopped"}
+        write_run(ctx)
+        return ctx.record["stages"]["g4_timing"]
+    with ctx.budget.measure("core"):
+        cold_command = [sys.executable, "-c", "import json,sys; from rbc.types import public_case_from_dict; from rbc.baselines import compile_parser; case=public_case_from_dict(json.loads(open(sys.argv[1]).readline())); compile_parser(case)", str(ctx.path / "data/g1_public.jsonl")]
+        cold_start = time.perf_counter_ns()
+        cold = subprocess.run(cold_command, capture_output=True, text=True, timeout=30)
+        cold_ms = (time.perf_counter_ns() - cold_start) / 1e6
+        if cold.returncode:
+            raise RuntimeError(f"cold parser load failed: {cold.stderr[-500:]}")
+        def compile_checked(case: Any) -> Any:
+            bundle = compile_parser(case)
+            if isinstance(bundle, OutOfScope):
+                raise RuntimeError(f"G1 case unexpectedly left parser scope: {case.case_id}")
+            return bundle
+        measured = measure_pipeline(compile_checked, decide, cases, policies, warmups=ctx.config["timing"]["warmups"])
+        measured.update({"method": "conventional_parser", "case_ids": list(case_ids), "cold_process_import_compile_ms": cold_ms,
+                         "peak_process_rss_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss if sys.platform == "darwin" else resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * 1024,
+                         "accelerator_memory": "not_applicable", "hardware": doctor(), "failures": 0,
+                         "trained_model": "not_attempted", "timing_scope": "public text parser, exact world enumeration, bundle decision; batch size one"})
+        metrics = json.loads((ctx.path / "metrics.json").read_text())["g1"]["conventional_parser"]
+        assumptions = {"volume": 10000, "machine_cost_per_second": 0.001, "fixed_cost": 0.0,
+                       "audit_retry_cost_per_case": 0.0, "review_costs": [0.25, 1.5, 5.0],
+                       "end_to_end_success_rate": None}
+        economics = economic_sensitivity({"compile_plus_future_16_ms": measured["latency_ms"]["compile_plus_future_16_ms"]["mean"], "coverage": metrics["coverage"]}, assumptions)
+        output = {"measured": measured, "economic_assumptions": assumptions, "economic_sensitivity": economics}
+        target = ctx.path / "timing.json"
+        target.write_text(json.dumps(output, sort_keys=True, indent=2, allow_nan=False) + "\n")
+        ctx.record["artifact_hashes"]["timing.json"] = hashlib.sha256(target.read_bytes()).hexdigest()
+        ctx.record["stages"]["g4_timing"] = {"status": "measured", "methods": list(methods), "cases": len(cases), "warmups": measured["warmups"], "batch_size": 1}
+    write_run(ctx)
+    write_report(ctx.path)
+    return ctx.record["stages"]["g4_timing"]
