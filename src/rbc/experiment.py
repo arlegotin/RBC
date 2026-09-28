@@ -14,11 +14,12 @@ import sys
 import tempfile
 import time
 from contextlib import contextmanager
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any, Callable, Iterator
 
 import yaml
+import numpy as np
 
 
 _KEYS: dict[str, set[str]] = {
@@ -204,3 +205,95 @@ def doctor() -> dict[str, Any]:
         "disk_source": "shutil.disk_usage(cwd)",
         "optional_backends": {name: __import__("importlib.util", fromlist=["find_spec"]).find_spec(name) is not None for name in ("torch", "transformers", "mlx_lm")},
     }
+
+
+def _source_fingerprint() -> dict[str, str]:
+    root = Path(__file__).resolve().parents[2]
+    return {str(path.relative_to(root)): hashlib.sha256(path.read_bytes()).hexdigest() for path in (root / "src/rbc/types.py", root / "src/rbc/logic.py", root / "src/rbc/data.py", root / "src/rbc/calibration.py")}
+
+
+def run_g0(ctx: RunContext) -> dict[str, Any]:
+    from .calibration import PredictionRow
+    from .data import generate_source, policy_key
+    from .logic import ast_to_dict, decide, make_bundle, save_bundle, validate_ast
+    from .report import recompute_metrics, verify_run, write_report
+    from .types import Accept, Ambiguous, BundleProvenance, SupportBelief, private_case_to_dict, public_case_to_dict, read_private_jsonl, read_public_jsonl
+
+    old = ctx.record["stages"].get("g0")
+    if old and old.get("status") == "passed":
+        if ctx.record.get("g0_source_fingerprint") != _source_fingerprint():
+            raise ValueError("G0 source changed; use a new run ID")
+        audit = verify_run(ctx.path)
+        if not audit.ok:
+            raise ValueError(f"completed G0 artifacts failed audit: {audit.errors}")
+        return old
+    if not ctx.budget.can_start("core", 30.0):
+        ctx.record["stages"]["g0"] = {"status": "budget_stopped", "reason": "insufficient remaining time for deterministic checks"}
+        write_run(ctx)
+        return ctx.record["stages"]["g0"]
+    ctx.record["stages"]["g0"] = {"status": "running"}
+    write_run(ctx)
+    with ctx.budget.measure("core"):
+        root = Path(__file__).resolve().parents[2]
+        command = [sys.executable, "-m", "pytest", "-q", "tests/test_logic.py", "tests/test_public_boundary.py", "tests/test_decisions.py", "tests/test_bundle_io.py", "tests/test_generator.py", "tests/test_renderers.py", "tests/test_splits.py", "tests/test_policy_pools.py", "tests/test_calibration.py", "tests/test_statistics.py"]
+        completed = subprocess.run(command, cwd=root, capture_output=True, text=True, timeout=120)
+        if completed.returncode:
+            ctx.record["stages"]["g0"] = {"status": "failed_correctness", "test_command": " ".join(command), "test_output": completed.stdout[-5000:] + completed.stderr[-2000:]}
+        else:
+            audited = [generate_source(ctx.config, f"g0-sample-{index:03d}", ctx.config["data"]["seed"] + index) for index in range(16)]
+            if any(sample.private.oracle_posterior[sample.private.true_index] <= 0 for sample in audited):
+                ctx.record["stages"]["g0"] = {"status": "failed_correctness", "reason": "generated true world missing from oracle posterior"}
+            else:
+                data_dir = ctx.path / "data"
+                data_dir.mkdir(exist_ok=True)
+                fixture_public = read_public_jsonl(root / "tests/fixtures/public_cases.jsonl")[0]
+                fixture_private = read_private_jsonl(root / "tests/fixtures/private_cases.jsonl")[0]
+                (data_dir / "public.jsonl").write_text(json.dumps(public_case_to_dict(fixture_public), sort_keys=True) + "\n")
+                (data_dir / "private.jsonl").write_text(json.dumps(private_case_to_dict(fixture_private), sort_keys=True) + "\n")
+                schema = fixture_public.schema
+                support = np.array([False, True, True, False], dtype=np.bool_)
+                model_supports = {
+                    "oracle_joint": support,
+                    "exact_xor_constraints": support,
+                    "oracle_marginal_product": np.ones(4, dtype=np.bool_),
+                }
+                raw_policies = [
+                    {"op": "count_eq", "ids": ["A_damaged", "B_damaged"], "k": 1},
+                    {"op": "and", "args": [{"op": "var", "id": "A_damaged"}, {"op": "var", "id": "B_damaged"}]},
+                    {"op": "var", "id": "A_damaged"},
+                ]
+                bundle_root = ctx.path / "bundles"
+                bundle_root.mkdir(exist_ok=True)
+                rows: list[PredictionRow] = []
+                for model_id, retained in model_supports.items():
+                    provenance = BundleProvenance(
+                        _hash_json(fixture_public.text), _hash_json(dict(fixture_public.records)),
+                        _hash_json({"schema_id": fixture_public.schema_id, "schema": [asdict(item) for item in schema]}),
+                        "none", "none", _hash_json(model_id + ":v1"), "exact-support-v1",
+                    )
+                    probabilities = np.array([0.0, 0.5, 0.5, 0.0]) if model_id != "oracle_marginal_product" else np.full(4, 0.25)
+                    bundle = make_bundle(schema, SupportBelief(retained, probabilities), retained, provenance)
+                    relpath = f"bundles/{model_id}"
+                    save_bundle(bundle, ctx.path / relpath)
+                    for policy_index, raw in enumerate(raw_policies):
+                        ast = validate_ast(raw, schema)
+                        result = decide(bundle, ast)
+                        status = "accept" if isinstance(result, Accept) else ("ambiguous" if isinstance(result, Ambiguous) else "out_of_scope")
+                        rows.append(PredictionRow(
+                            "g0_fixture", fixture_private.source_group, fixture_public.case_id, model_id,
+                            policy_key(ast, schema).hex(), policy_index == 0, None, status,
+                            result.action if isinstance(result, Accept) else None, None,
+                            ast_to_dict(ast),
+                            (result.world_a, result.world_b) if isinstance(result, Ambiguous) else None,
+                            relpath,
+                        ))
+                (ctx.path / "predictions.jsonl").write_text("".join(json.dumps(asdict(row), sort_keys=True, allow_nan=False) + "\n" for row in rows))
+                ctx.record["planned_primary"] = {"g0_fixture": {"group_id": fixture_private.source_group, "policy_key_hex": rows[0].policy_key_hex, "models": sorted(model_supports)}}
+                ctx.record["g0_source_fingerprint"] = _source_fingerprint()
+                ctx.record["stages"]["g0"] = {"status": "passed", "test_command": " ".join(command), "test_output": completed.stdout.strip(), "generated_truth_checks": len(audited), "scope": "numeric_oracle_and_kernel_only"}
+                (ctx.path / "metrics.json").write_text(json.dumps(recompute_metrics(ctx.path), sort_keys=True, indent=2, allow_nan=False) + "\n")
+                file_paths = [path for path in ctx.path.rglob("*") if path.is_file() and path.name not in {"run.json", "REPORT.md", ".run.lock"} and not path.name.startswith(".")]
+                ctx.record["artifact_hashes"] = {str(path.relative_to(ctx.path)): hashlib.sha256(path.read_bytes()).hexdigest() for path in sorted(file_paths)}
+    write_run(ctx)
+    write_report(ctx.path)
+    return ctx.record["stages"]["g0"]

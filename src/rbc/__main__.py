@@ -35,7 +35,23 @@ def main(argv: list[str] | None = None) -> int:
 
         print(write_report(args.run))
         return 0
-    if args.command in {"run", "verify"}:
+    if args.command == "verify":
+        from .report import verify_run
+
+        audit = verify_run(args.run)
+        print(json.dumps({"ok": audit.ok, "errors": audit.errors, "notes": audit.notes}, indent=2, sort_keys=True))
+        return 0 if audit.ok else 1
+    if args.command == "run" and args.through == "g0":
+        from .experiment import load_config, open_run, run_g0
+
+        ctx = open_run(load_config(args.config))
+        try:
+            stage = run_g0(ctx)
+        finally:
+            ctx.close()
+        print(json.dumps(stage, indent=2, sort_keys=True))
+        return 0 if stage["status"] == "passed" else 1
+    if args.command == "run":
         print(f"{args.command} stage is not implemented yet", file=sys.stderr)
         return 2
     raise AssertionError("argparse allowed an unknown command")
