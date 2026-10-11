@@ -1,0 +1,2 @@
+include LICENSE NOTICE LICENSING.md CITATION.cff
+recursive-include LICENSES *.txt

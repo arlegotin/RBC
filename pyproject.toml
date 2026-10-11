@@ -5,7 +5,10 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "relational-belief-compilation"
 version = "0.1.0"
+readme = "README.md"
 description = "Local research proof of concept for reusable joint beliefs"
+license = {text = "AGPL-3.0-only"}
+authors = [{name = "Artem Legotin"}]
 requires-python = ">=3.11,<3.13"
 dependencies = ["numpy", "scipy", "PyYAML"]
 
@@ -20,3 +23,10 @@ where = ["src"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
+
+[project.urls]
+Repository = "https://github.com/arlegotin/RBC"
+Issues = "https://github.com/arlegotin/RBC/issues"
+
+[tool.setuptools]
+license-files = ["LICENSE", "NOTICE", "LICENSING.md", "LICENSES/*.txt"]

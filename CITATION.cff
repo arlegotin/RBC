@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "If you build on this software, findings, or ideas, please cite this repository and the exact commit used."
+type: software
+title: "RBC: Relational Belief Compilation"
+authors:
+  - family-names: Legotin
+    given-names: Artem
+version: 0.1.0
+license:
+  - AGPL-3.0-only
+  - CC-BY-4.0
+repository-code: "https://github.com/arlegotin/RBC"
+url: "https://github.com/arlegotin/RBC"
+abstract: >-
+  An exact joint-belief policy executor and replayable returns-case
+  experiment. On 500 generated development cases, joint support accepted 168
+  decisions versus 158 for independent oracle marginals, while a conventional
+  public-text parser matched the joint oracle. The two-percentage-point
+  advantage fell below the predeclared continuation gate; learned compilation
+  and independent human-written validation were not attempted.
+keywords:
+  - joint beliefs
+  - uncertainty
+  - policy execution
+  - selective prediction
+  - relational reasoning
+  - negative results

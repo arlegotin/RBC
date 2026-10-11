@@ -1,103 +1,82 @@
-# Relational Belief Compilation
+# RBC — Relational Belief Compilation
 
-**Research status: stopped after the first development experiment.** The representation works in a small, exact example, but its advantage was too small on our generated returns cases, and an ordinary text parser matched the best possible certainty decisions. That is a useful negative result: the planned learned model was not trained.
+Two returned items are equally likely to be damaged. But you also know **exactly one** is damaged. Store only the two 50% probabilities and you lose that relationship: an independent model invents worlds where both items are damaged or neither is.
 
-RBC asks a simple question: **can we keep relationships between uncertain facts, then reuse them to answer different policies?** This repository is a local, replayable experiment that tried to reject that idea cheaply before spending time on model training.
+RBC tests whether keeping complete, joint interpretations of uncertain facts lets us reuse the same evidence across different policies—and abstain when those interpretations disagree.
 
-## The idea in one case
+**The exact representation works. On 500 generated returns cases, a conventional text parser matched the oracle, and keeping relationships added only 2 percentage points over independent marginals.** That was below the declared continuation threshold, so the experiment stopped before training a learned compiler.
 
-Imagine two returned items. Exactly one is damaged, but we do not know which.
+The result gives a working relational decision kernel, a replayable benchmark, and a concrete reason to avoid a model-training project on this workload.
 
-| Possible interpretation | Red damaged | Blue damaged |
-| --- | :---: | :---: |
+## One case makes the difference
+
+| Retained interpretation | Red item damaged | Blue item damaged |
+|---|:---:|:---:|
 | World 1 | Yes | No |
 | World 2 | No | Yes |
 
-Each item is damaged with probability 50%. If we keep only those two percentages and treat them as independent, we accidentally introduce two impossible worlds: both damaged and neither damaged. Keeping the **joint** possibilities preserves “exactly one.”
+Ask whether exactly one item is damaged: both worlds say yes. Ask whether both are damaged: both say no. Ask whether the red item is damaged: they disagree, so the executor abstains and returns the two worlds as witnesses.
 
-That matters when a policy asks a question:
+The proposed compiler would turn case text and a declared schema into a distribution over complete interpretations, then reuse it for later policies. This prototype evaluates policies exactly over the retained worlds. It recommends an action only when every retained world agrees. That certificate establishes agreement within the set; it doesn't prove the true world was retained.
 
-| Policy question | Answer from these two worlds |
-| --- | --- |
-| Is exactly one item damaged? | **Yes** in both worlds: accept. |
-| Are both items damaged? | **No** in both worlds: accept. |
-| Is the red item damaged? | The worlds disagree: abstain. |
+The experiment uses six Boolean facts—damaged or unused for each of three items—giving 64 possible worlds. Individual facts, relational observations, and missing information narrow the retained set.
 
-An RBC compiler is meant to turn case text and a declared schema into a distribution over complete interpretations, then reuse that result for later policies. This prototype's exact executor evaluates a policy in every retained world. It recommends an action only when those worlds agree; otherwise it returns two disagreeing worlds as witnesses. The agreement certificate describes the retained set. It does **not** prove that the true world was retained.
+## What the screen found
 
-```text
-case text + six named facts
-          ↓
-  belief over 64 worlds
-          ↓
-  executable policy
-          ↓
-  agreed answer, or abstention with witnesses
-```
+Each of the 500 generated development cases had one preselected policy. The oracle saw the generator's private observation program. The parser saw only public case text and the schema. The marginal-product control used oracle marginals, deliberately discarding their relationships.
 
-## What happened in the experiment
+| Method | Accepted decisions / 500 | Accepted mistakes |
+|---|---:|---:|
+| Exact joint oracle | 168 | 0 |
+| Conventional text parser | 168 | 0 |
+| Product of oracle marginals | 158 | 0 |
 
-We generated 500 short returns cases, with one preselected policy per case. The six Boolean facts describe whether each of three items is damaged or unused. The experiment deliberately mixes individual facts, relational evidence, and missing information. The **oracle** knows the generator's true observation program; the **conventional parser** reads only the public case text and schema.
+Keeping relationships gained **10 decisions: 2 percentage points**. The predeclared gate required at least **10 points**. Even within the 266 relational cases, the gain was only about 3.8 points.
 
-| Method | Decisions accepted out of 500 | Accepted mistakes | Role |
-| --- | ---: | ---: | --- |
-| Exact joint oracle | 168 | 0 | Information ceiling; sees private generator labels |
-| Conventional text parser | 168 | 0 | Public-text baseline with exact policy execution |
-| Product of oracle marginals | 158 | 0 | Measures information lost by discarding relationships |
+The parser reproduced the oracle's retained worlds on all 500 cases. Under the rule requiring agreement in every possible world, it reached the information ceiling on this generated language. Many remaining cases simply lacked the facts needed for a certain answer. A probabilistic rule could accept more decisions with some risk; that would change the operating contract.
 
-The joint representation gained **10 decisions in 500 cases: 2 percentage points** over the marginal product. The predeclared continuation gate required at least **10 points**. Even on the 266 relational cases, the gain was 10 decisions, about **3.8 points**.
+Zero observed accepted mistakes also didn't establish the project's 2% risk target: the parser's panel-adjusted one-sided upper bound was about **2.41%**. These were development cases from agent-authored templates, with no independent human-written validation. Learned heads, policy-supervision ablations, final held-out evaluation, and the local-LLM baseline were **not run**.
 
-The parser reproduced the joint oracle's retained worlds on all 500 cases. For decisions requiring agreement across *every* possible world, it reached the information ceiling on this workload. The remaining cases often lack enough evidence for a certain answer; better text processing cannot reveal an item identity the case never supplied. A probabilistic action rule could accept more decisions with some risk, but that is a different operating choice.
+[Full report](runs/poc-20260928-01/REPORT.md) · [Stop decision](docs/results/2026-09-28-g1.md) · [Research specification](docs/superpowers/specs/2026-09-28-rbc-design.md)
 
-These were **development cases**, not a final test set. Zero observed accepted mistakes did not establish the project's 2% accepted-risk target: the panel-adjusted one-sided upper bound for the parser was about **2.41%**. The language was generated from agent-authored templates, with no independent human-written validation. [Read the full report](runs/poc-20260928-01/REPORT.md) for slices, the oracle probability readout, stress tests, timing, and exact bounds.
+## What remains useful
 
-## What this result says
+The [logic kernel](src/rbc/logic.py) preserves relationships, executes policies, and supplies disagreement witnesses. The [parser and controls](src/rbc/baselines.py) show what ordinary relational software can already capture. The [case generator](src/rbc/data.py) and [verification/reporting code](src/rbc/report.py) make the negative result inspectable.
 
-| Research question | Result here |
-| --- | --- |
-| Does preserving relationships ever help? | **Yes in the exact example.** The workload-average gain was too small to pass the project gate. |
-| Can a small model learn a useful language-to-joint-belief compiler? | **Untested.** The early gate stopped training before any encoder or learned head was downloaded. |
-| Does policy-outcome supervision improve a joint model? | **Untested.** There was no learned-model comparison. |
+A separate synthetic shift example also shows a failure worth understanding: two populations can have identical individual marginals and different relationships. A frozen old calibration accepted 128 wrong XOR actions out of 128 shifted cases; recalibration on separate shifted cases abstained on all of them. This is a numeric counterexample, not a trained-model result or 128 independent language evaluations.
 
-For this generated workload, **a learned RBC compiler is not a good next investment**. The negative finding is specific: the relationship advantage was small under the chosen policies, and simple relational software already captured it. It does not establish how well the parser, a learned compiler, or a local LLM would handle independently written cases. The local-LLM baseline was not run after the early stop.
+The next useful test would use independently written cases and competent parser/LLM baselines before reopening training. Changing the generator merely to break the parser wouldn't establish practical value.
 
-The smallest worthwhile follow-up is a separately written case set, evaluated against a competent parser and a local relational LLM compiler *before* reopening model training. Changing the generator just to make the parser fail would not answer the practical question.
+## Replay without a model
 
-## Explore and reproduce
+The saved run is about 2 MB. It contains the [effective config](runs/poc-20260928-01/run.json), [per-case predictions](runs/poc-20260928-01/predictions.jsonl), and report. Verification needs no model weights or network access after installation.
 
-The repository includes the complete [effective config](runs/poc-20260928-01/run.json), [per-case predictions](runs/poc-20260928-01/predictions.jsonl), and [replayable report](runs/poc-20260928-01/REPORT.md). The archived run is about 2 MB and needs no model weights or network access to verify. It was produced on an Apple M3 Max with 36 GB of physical memory, using native arm64 Python 3.12.9.
-
-Create a local environment with Python 3.11 or 3.12; replace `python3.12` below with `python3.11` if that is your installed version. These commands use the tested core dependency versions and leave system Python untouched:
+Use Python 3.12 for the pinned dependencies below; the recorded run used native ARM Python 3.12.9 on an Apple M3 Max with 36 GB RAM.
 
 ```bash
+git clone https://github.com/arlegotin/RBC.git
+cd RBC
 python3.12 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.lock.txt
 python -m pip install -e . --no-deps
 python -m pytest -q
-```
-
-Replay the saved decisions and regenerate the report:
-
-```bash
 python -m rbc verify --run runs/poc-20260928-01
-python -m rbc report --run runs/poc-20260928-01
 ```
 
-The following commands resume the completed correctness and development gates; compatible stages reuse their saved artifacts:
+To regenerate the report or resume the completed gates:
 
 ```bash
+python -m rbc report --run runs/poc-20260928-01
 python -m rbc doctor
 python -m rbc run --through g0 --config configs/poc.yaml
 python -m rbc run --through g1 --config configs/poc.yaml
 ```
 
-Requests for `g2` or `g3` on this run report `blocked_by_g1`. No learned or local-LLM model snapshot was fetched or pinned, and no result for those methods is implied.
+Compatible stages reuse saved artifacts. Requests for `g2` or `g3` report `blocked_by_g1`; no learned or local-LLM snapshot was downloaded. The existing failure remains the result of this workload.
 
-## Where to look
+## Credit and reuse
 
-- [Research specification](docs/superpowers/specs/2026-09-28-rbc-design.md) and [implementation plan](docs/superpowers/plans/2026-09-28-rbc.md): the predeclared gates and limits.
-- [Exact logic kernel](src/rbc/logic.py) and [case generator](src/rbc/data.py): worlds, safe policies, observations, and oracle labels.
-- [Conventional parser and controls](src/rbc/baselines.py): the baseline that tied the oracle on generated text.
-- [Verification and reporting](src/rbc/report.py): offline replay from saved per-case records.
-- [G1 decision note](docs/results/2026-09-28-g1.md): the concise research conclusion.
+By **Artem Legotin**. Original code is licensed under [AGPL-3.0-only](LICENSE); original prose and reports under [CC BY 4.0](LICENSES/CC-BY-4.0.txt). Preserve author credit when sharing covered material; see [licensing scope](LICENSING.md).
+
+If you build on the decision kernel, benchmark, findings, or ideas, please cite [CITATION.cff](CITATION.cff), link this repository, and identify the commit you used. Citation of independently reused ideas is a scholarly request, separate from the license obligations.
